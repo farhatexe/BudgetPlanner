@@ -12,6 +12,7 @@ using System.ComponentModel;
 
 namespace BudgetPlanner.Controllers
 {
+    [Authorize]
     public class TransactionsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -207,6 +208,9 @@ namespace BudgetPlanner.Controllers
             {
                 return HttpNotFound();
             }
+
+            // DO I NEED TO CHECK FOR RECONSILED FLAG?
+            // IF NOT RECONCILED, SHOULD AMOUNT BE ADDED BACK TO BALANCE?
             return View(transaction);
         }
 

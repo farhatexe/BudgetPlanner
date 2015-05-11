@@ -4,8 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
-    <link href="/Content/Block/bootstrap-block.css" rel="stylesheet" />
-    <link href="/Content/Block/login.css" rel="stylesheet" />
+
+    <link href="/Content/Block/bootstrap.css" rel="stylesheet" />
 
     <link rel="shortcut icon" href="assets/ico/favicon.ico">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
@@ -16,6 +16,8 @@
     <!-- Google Fonts call. Font Used Open Sans & Raleway -->
     <link href="http://fonts.googleapis.com/css?family=Raleway:400,300" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
+
+    <script src="~/Scripts/jquery-2.1.3.min.js"></script>
 
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
@@ -34,23 +36,23 @@
                 @*@Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
             </div>
             <div class="navbar-collapse collapse">
-                <ul id="active" class="nav navbar-nav">
+                <ul class="nav navbar-nav">
                     <li>@if (ViewBag.Title.Contains("Household"))
-                    { <text> class="selected" </text>   }@Html.ActionLink("Household", "Index", "Household")</li>
+                    { <text> class="active" </text>   }@Html.ActionLink("Household", "Index", "Household")</li>
                     <li>@if (ViewBag.Title.Contains("Account"))
-                    { <text> class="selected" </text>   }@Html.ActionLink("Accounts", "Index", "BudgetAccounts")</li>
+                    { <text> class="active" </text>   }@Html.ActionLink("Accounts", "Index", "BudgetAccounts")</li>
                     <li>@if (ViewBag.Title.Contains("Budget"))
-                    { <text> class="selected" </text>   }@Html.ActionLink("Budget", "Index", "BudgetItems")</li>
+                    { <text> class="active" </text>   }@Html.ActionLink("Budget", "Index", "BudgetItems")</li>
                     <li>@if (ViewBag.Title.Contains("Category"))
-                    { <text> class="selected" </text>   }@Html.ActionLink("Categories", "Index", "Categories")</li>
+                    { <text> class="active" </text>   }@Html.ActionLink("Categories", "Index", "Categories")</li>
                     <li>@if (ViewBag.Title.Contains("Transaction"))
-                    { <text> class="selected" </text>   }@Html.ActionLink("Transactions", "Index", "Transactions")</li>
+                    { <text> class="active" </text>   }@Html.ActionLink("Transactions", "Index", "Transactions")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
     </div>
-    <div class="container body-content">
+    <div class="container">
         @RenderBody()
         <hr />
         <footer>

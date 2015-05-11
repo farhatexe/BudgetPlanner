@@ -10,7 +10,8 @@ using Microsoft.AspNet.Identity;
 using BudgetPlanner.Models;
 
 namespace BudgetPlanner.Controllers
-{
+{   
+    [Authorize]
     public class BudgetAccountsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

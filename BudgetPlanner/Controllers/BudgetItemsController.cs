@@ -11,6 +11,7 @@ using BudgetPlanner.Models;
 
 namespace BudgetPlanner.Controllers
 {
+    [Authorize]
     public class BudgetItemsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

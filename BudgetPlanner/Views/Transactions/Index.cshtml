@@ -5,6 +5,8 @@
 }
 
 <div class="container">
+    <br />
+    <br />
     <div class="col-md-12">
         <div class="col-md-10">
             <div class="panel">
@@ -27,56 +29,59 @@
                 <div class="panel-body">
                     <div class="col-md-12">
                         <table class="table">
-                            <tr>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Date)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Description)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Category.Name)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Amount)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Reconciled)
-                                </th>
-                                <th>
-                                    @Html.Label("Updated By")
-                                </th>
-                                <th></th>
-                            </tr>
-
-                            @foreach (var item in Model)
-                            {
+                            <thead>
                                 <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Date)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Description)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Category.Name)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Amount)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Reconciled)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.UpdateByUser.Name)
-                                    </td>
-                                    <td>
-                                        <a href="@Url.Action("Edit","Transactions",new{id=item.Id})" class="glyphicon glyphicon-pencil"> </a>
-                                        <a href="@Url.Action("Details","Transactions",new{id=item.Id})" class="glyphicon glyphicon-list"> </a>
-                                        <a href="@Url.Action("Delete","Transactions",new{id=item.Id})" class="glyphicon glyphicon-trash"> </a>
-                                    </td>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Date)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Description)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Category.Name)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Amount)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Reconciled)
+                                    </th>
+                                    <th>
+                                        @Html.Label("Updated By")
+                                    </th>
+                                    <th></th>
                                 </tr>
-                            }
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Date)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Description)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Category.Name)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Amount)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Reconciled)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.UpdateByUser.Name)
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("Edit","Transactions",new{id=item.Id})" class="glyphicon glyphicon-pencil"> </a>
+                                            <a href="@Url.Action("Details","Transactions",new{id=item.Id})" class="glyphicon glyphicon-list"> </a>
+                                            <a href="@Url.Action("Delete","Transactions",new{id=item.Id})" class="glyphicon glyphicon-trash"> </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>                           
                         </table>
                     </div>
                     
