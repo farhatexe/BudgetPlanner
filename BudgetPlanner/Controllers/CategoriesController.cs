@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using BudgetPlanner.Models;
 
 namespace BudgetPlanner.Controllers
@@ -39,7 +40,6 @@ namespace BudgetPlanner.Controllers
         // GET: Categories/Create
         public ActionResult Create()
         {
-            ViewBag.HouseholdId = new SelectList(db.Household, "Id", "Name");
             return View();
         }
 
@@ -48,16 +48,21 @@ namespace BudgetPlanner.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,HouseholdId,Name")] Category category)
+        public ActionResult Create([Bind(Include = "Id,Name,Income,Expense")] Category category)
         {
             if (ModelState.IsValid)
             {
+                var userId = User.Identity.GetUserId();
+                var householdId = db.Users.FirstOrDefault(u => u.Id == userId).HouseholdId;
+
+                if (householdId.HasValue)
+                    category.HouseholdId = (int)householdId;
+
                 db.Categories.Add(category);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.HouseholdId = new SelectList(db.Household, "Id", "Name", category.HouseholdId);
             return View(category);
         }
 
@@ -73,7 +78,7 @@ namespace BudgetPlanner.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.HouseholdId = new SelectList(db.Household, "Id", "Name", category.HouseholdId);
+
             return View(category);
         }
 
@@ -82,15 +87,16 @@ namespace BudgetPlanner.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,HouseholdId,Name")] Category category)
+        public ActionResult Edit([Bind(Include = "Id,Name,Income,Expense")] Category category)
         {
             if (ModelState.IsValid)
-            {
+            {                
                 db.Entry(category).State = EntityState.Modified;
+                db.Entry(category).Property(p => p.HouseholdId).IsModified = false;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.HouseholdId = new SelectList(db.Household, "Id", "Name", category.HouseholdId);
+
             return View(category);
         }
 

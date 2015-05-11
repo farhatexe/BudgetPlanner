@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using BudgetPlanner.Models;
+using System.ComponentModel;
 
 namespace BudgetPlanner.Controllers
 {
@@ -16,9 +17,15 @@ namespace BudgetPlanner.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Transactions
-        public ActionResult Index()
+        public ActionResult Index([DefaultValue(1)]int? acctId)
+        //public ActionResult Index()
         {
-            var transactions = db.Transactions.Include(t => t.Category);
+            ViewBag.Balance = db.BudgetAccounts.FirstOrDefault(a => a.Id == acctId).Balance;
+            ViewBag.reconBalance = db.BudgetAccounts.FirstOrDefault(a => a.Id == acctId).ReconciledBalance;
+            ViewBag.Name = db.BudgetAccounts.FirstOrDefault(a => a.Id == acctId).Name;
+            ViewBag.AccountId = acctId;
+
+            var transactions = db.Transactions.Include(t => t.Category).Include(t=> t.UpdateByUser).Where(t=> t.AccountId == acctId);
             return View(transactions.ToList());
         }
 
@@ -40,6 +47,7 @@ namespace BudgetPlanner.Controllers
         // GET: Transactions/Create
         public ActionResult Create()
         {
+            ViewBag.AccountId = new SelectList(db.BudgetAccounts, "Id", "Name");
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name");
             return View();
         }
@@ -55,14 +63,14 @@ namespace BudgetPlanner.Controllers
             {
                 var catId = transaction.CategoryId;
                 var acctId = transaction.AccountId;
-                var dc = false;
+                var exp = false;
 
                 // determine if income or expense transaction 
                 if (catId.HasValue)
-                    dc = db.BudgetItems.FirstOrDefault(c => c.CategoryId == catId).Classification;
+                    exp = db.Categories.FirstOrDefault(c => c.Id == catId).Expense;
 
                 // if expense and amount > 0, then reverse sign
-                if (dc = false && transaction.Amount > 0)
+                if (exp == true && transaction.Amount > 0)
                     transaction.Amount *= -1;
 
                 // update balance
@@ -70,6 +78,9 @@ namespace BudgetPlanner.Controllers
                 balance += transaction.Amount;
 
                 // NEED TO UPDATE ACCOUNT WITH NEW BALANCE
+                BudgetAccount acctToUpdate = db.BudgetAccounts.FirstOrDefault(a => a.Id == acctId);
+                acctToUpdate.Balance = balance;
+                db.Entry(acctToUpdate).State = EntityState.Modified;
 
                 db.Transactions.Add(transaction);
                 db.SaveChanges();
@@ -82,7 +93,8 @@ namespace BudgetPlanner.Controllers
         }
 
         // GET: Transactions/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int? id, [DefaultValue(1)] int? acctId)
+        //public ActionResult Edit(int? id)
         {
             if (id == null)
             {
@@ -96,7 +108,10 @@ namespace BudgetPlanner.Controllers
 
             TempData["Transaction"] = transaction;
 
-            ViewBag.AccountId = new SelectList(db.BudgetAccounts, "Id", "Name", transaction.AccountId);
+            ViewBag.Balance = db.BudgetAccounts.FirstOrDefault(a => a.Id == acctId).Balance;
+            ViewBag.reconBalance = db.BudgetAccounts.FirstOrDefault(a => a.Id == acctId).ReconciledBalance;
+            ViewBag.Name = db.BudgetAccounts.FirstOrDefault(a => a.Id == acctId).Name;
+            ViewBag.AccountId = acctId;
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", transaction.CategoryId);
             return View(transaction);
         }
@@ -106,38 +121,69 @@ namespace BudgetPlanner.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,AccountId,Amount,AbsAmount,ReconciledAmount,AbsReconciledAmount,Date,Description,CategoryId")] Transaction transaction)
+        public ActionResult Edit([Bind(Include = "Id,AccountId,Amount,AbsAmount,ReconciledAmount,Date,Description,CategoryId,Reconciled")] Transaction transaction)
         {
             if (ModelState.IsValid)
             {
                 var userId = User.Identity.GetUserId();
                 var catId = transaction.CategoryId;
                 var acctId = transaction.AccountId;
-                var dc = false;
-                var oldAmount = 0;
+                var exp = false;
+                decimal balance = 0;
+                decimal reconBalance = 0;
+                decimal oldAmount = 0;
+                decimal amtDifference = 0;
+
+                Transaction oldTransaction = new Transaction();
 
                 // get tempdata amount
-                //if(TempData["Transaction"] != null)
-                //    Transaction oldTransaction = (Transaction)TempData["Transaction"];
+                if (TempData["Transaction"] != null)
+                {
+                    oldTransaction = TempData["Transaction"] as Transaction;
+                }                   
 
                 // determine if transaction amount changed and if so, reverse sign
-                //if(oldTransaction.Amount != transaction.Amount)
-                //    oldAmount = oldTransaction.Amount * -1;
+                if (oldTransaction.Amount != transaction.Amount)
+                {
+                    amtDifference = amtDifference + (oldTransaction.Amount - transaction.Amount);
+                    oldAmount = oldTransaction.Amount * -1;
+                }
 
                 // determine if income or expense transaction 
                 if (catId.HasValue)
-                    dc = db.BudgetItems.FirstOrDefault(c => c.CategoryId == catId).Classification;
+                    exp = db.Categories.FirstOrDefault(c => c.Id == catId).Expense;
 
                 // if expense and amount > 0, then reverse sign
-                if (dc = false && transaction.Amount > 0)
+                if (exp == true && transaction.Amount > 0)
                     transaction.Amount *= -1;
 
-                // get account balance and update first with oldAmount and then new amount
-                var balance = db.BudgetAccounts.FirstOrDefault(a => a.Id == acctId).Balance;
-                balance += oldAmount;
-                balance += transaction.Amount;
+                // get account balance and reconciled balance
+                balance = db.BudgetAccounts.FirstOrDefault(a => a.Id == acctId).Balance;
+                reconBalance = db.BudgetAccounts.FirstOrDefault(a => a.Id == acctId).ReconciledBalance;
+
+                // calculate balance if transaction amount changed and not reconciled
+                if(oldTransaction.Amount != transaction.Amount)
+                {
+                    balance += oldAmount; 
+                    balance += transaction.Amount;
+                }
+
+                // if transaction just reconciled, then calculate reconciled balance
+                if (transaction.Reconciled == true)
+                {
+                    reconBalance += oldAmount;
+                    reconBalance += transaction.Amount;
+                };
 
                 // NEED TO UPDATE ACCOUNT WITH NEW BALANCE
+                BudgetAccount acctToUpdate = db.BudgetAccounts.FirstOrDefault(a => a.Id == acctId);
+                acctToUpdate.Balance = balance;
+                acctToUpdate.ReconciledBalance = reconBalance;
+
+                db.Entry(acctToUpdate).State = EntityState.Modified;
+
+                transaction.UpdateByUserId = userId;
+                transaction.Updated = DateTimeOffset.Now;
 
                 db.Entry(transaction).State = EntityState.Modified;
                 db.SaveChanges();

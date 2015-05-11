@@ -10,6 +10,8 @@ namespace BudgetPlanner.Models
         public int Id { get; set; }
         public int HouseholdId { get; set; }
         public string Name { get; set; }
+        public bool Income { get; set; }
+        public bool Expense { get; set; }
 
         public virtual Household Household { get; set; }
 

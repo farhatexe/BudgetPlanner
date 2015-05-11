@@ -1,0 +1,133 @@
+﻿@using BudgetPlanner.Models;
+
+@model IEnumerable<BudgetPlanner.Models.BudgetItem>
+
+@{
+    ViewBag.Title = "Budget Item Index";
+}
+
+<div class="container">
+    <div class="col-md-12">
+        <div class="col-md-6">
+            <div class="row">               
+                <h4>
+                    @ViewBag.Household
+                    Household Budget
+                </h4>
+            </div>
+            <div class="row">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <div class="btn pull-left"><a href="@Url.Action("Create","BudgetItems")" class="glyphicon glyphicon-plus"> </a></div>
+                        <div class="text-left">
+                            <h4>Income</h4>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Description)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Category.Name)
+                                </th>                                
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Amount)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Frequency)
+                                </th>
+                                <th></th>
+                            </tr>
+
+                            @foreach (var item in Model.Where(b=> b.Category.Income == true))
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Category.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Amount)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Frequency)
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("Edit","BudgetItems",new{id=item.Id})" class="glyphicon glyphicon-pencil"> </a>
+                                        <a href="@Url.Action("Details","BudgetItems",new{id=item.Id})" class="glyphicon glyphicon-list"> </a>
+                                        <a href="@Url.Action("Delete","BudgetItems",new{id=item.Id})" class="glyphicon glyphicon-trash"> </a>
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>          
+            </div>
+            <div class="row"></div>
+            <div class="row">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <div class="btn pull-left"><a href="@Url.Action("Create","BudgetItems")" class="glyphicon glyphicon-plus"> </a></div>
+                        <div class="text-left">
+                            <h4>Expenses</h4>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Description)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Category.Name)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Amount)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Frequency)
+                                </th>
+                                <th></th>
+                            </tr>
+
+                            @foreach (var item in Model.Where(b => b.Category.Expense == true))
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Category.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Amount)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Frequency)
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("Edit","BudgetItems",new{id=item.Id})" class="glyphicon glyphicon-pencil"> </a>
+                                        <a href="@Url.Action("Details","BudgetItems",new{id=item.Id})" class="glyphicon glyphicon-list"> </a>
+                                        <a href="@Url.Action("Delete","BudgetItems",new{id=item.Id})" class="glyphicon glyphicon-trash"> </a>
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            @*<br />
+            <br />
+            @Html.Partial("Create")*@
+            
+        </div>
+
+
+    </div>
+</div>

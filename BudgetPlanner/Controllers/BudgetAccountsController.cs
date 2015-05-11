@@ -18,7 +18,12 @@ namespace BudgetPlanner.Controllers
         // GET: BudgetAccounts
         public ActionResult Index()
         {
+            var userId = User.Identity.GetUserId();
+            var hhId = db.Users.First(u=> u.Id == userId).HouseholdId;
+
             var budgetAccounts = db.BudgetAccounts.Include(b => b.Household);
+            ViewBag.Household = db.Household.First(h => h.Id == hhId).Name;
+
             return View(budgetAccounts.ToList());
         }
 

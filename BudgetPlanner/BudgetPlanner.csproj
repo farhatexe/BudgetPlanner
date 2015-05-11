@@ -100,6 +100,18 @@
       <HintPath>..\packages\Microsoft.Owin.Security.Twitter.3.0.1\lib\net45\Microsoft.Owin.Security.Twitter.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.3.0.1304.1\lib\Net45\Microsoft.Practices.Unity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.3.0.1304.1\lib\Net45\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MvcTables, Version=1.0.33.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvcTables.1.0.33.0\lib\net45\MvcTables.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -112,11 +124,23 @@
       <HintPath>..\packages\Sendgrid.6.1.0\lib\SendGridMail.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="StaticReflection, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExpressionReflection.1.2.0\lib\net45\StaticReflection.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http.Extensions, Version=2.2.13.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.13\lib\net45\System.Net.Http.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives, Version=4.2.13.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.13\lib\net45\System.Net.Http.Primitives.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.DynamicData" />
@@ -196,6 +220,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BudgetAccountsController.cs" />
+    <Compile Include="Controllers\BudgetItemsController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HouseholdsController.cs" />
@@ -209,6 +234,7 @@
     <Compile Include="Models\BudgetAccount.cs" />
     <Compile Include="Models\BudgetItem.cs" />
     <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\DashboardViewModel.cs" />
     <Compile Include="Models\Household.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Invitation.cs" />
@@ -218,6 +244,12 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Block\Html\calendar.html" />
+    <Content Include="Content\Block\Html\index.html" />
+    <Content Include="Content\Block\Html\login.html" />
+    <Content Include="Content\Block\Html\manager.html" />
+    <Content Include="Content\Block\Html\tables.html" />
+    <Content Include="Content\Block\Html\user.html" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -251,6 +283,112 @@
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Content\Block\bootstrap-block.css" />
+    <Content Include="Content\Block\flexslider.css" />
+    <Content Include="Content\Block\font-style.css" />
+    <Content Include="Content\Block\login.css" />
+    <Content Include="Content\Block\main.css" />
+    <Content Include="Content\Block\register.css" />
+    <Content Include="Content\Block\table.css" />
+    <Content Include="Content\Block\fonts\linecons.svg" />
+    <Content Include="Theme\assets\fullcalendar\fullcalendar.css" />
+    <Content Include="Theme\assets\fullcalendar\fullcalendar.js" />
+    <Content Include="Theme\assets\fullcalendar\fullcalendar.min.js" />
+    <Content Include="Theme\assets\fullcalendar\fullcalendar.print.css" />
+    <Content Include="Theme\assets\fullcalendar\gcal.js" />
+    <Content Include="Theme\assets\fullcalendar\jquery-ui-1.8.23.custom.min.js" />
+    <Content Include="Content\Block\img\bg.JPG" />
+    <Content Include="Content\Block\img\down-small.png" />
+    <Content Include="Content\Block\img\down.png" />
+    <Content Include="Content\Block\img\face.jpg" />
+    <Content Include="Content\Block\img\face36x36.jpg" />
+    <Content Include="Content\Block\img\face80x80.jpg" />
+    <Content Include="Content\Block\img\glyphicons-halflings-white.png" />
+    <Content Include="Content\Block\img\glyphicons-halflings.png" />
+    <Content Include="Content\Block\img\logo.png" />
+    <Content Include="Content\Block\img\logo30.png" />
+    <Content Include="Content\Block\img\photo01.jpeg" />
+    <Content Include="Content\Block\img\photo02.jpg" />
+    <Content Include="Content\Block\img\photo03.jpg" />
+    <Content Include="Content\Block\img\photo04.jpg" />
+    <Content Include="Content\Block\img\sep-half.png" />
+    <Content Include="Content\Block\img\slide01.png" />
+    <Content Include="Content\Block\img\slide02.png" />
+    <Content Include="Content\Block\img\up-small.png" />
+    <Content Include="Content\Block\img\up.png" />
+    <Content Include="Content\Block\img\user-avatar.jpg" />
+    <Content Include="Scripts\Block\admin.js" />
+    <Content Include="Scripts\Block\bootstrap.js" />
+    <Content Include="Scripts\Block\dash-charts.js" />
+    <Content Include="Scripts\Block\dash-noty.js" />
+    <Content Include="Scripts\Block\datatables\jquery.dataTables.js" />
+    <Content Include="Scripts\Block\datatables\jquery.dataTables.min.js" />
+    <Content Include="Scripts\Block\gauge.js" />
+    <Content Include="Scripts\Block\highcharts.js" />
+    <Content Include="Scripts\Block\jquery.flexslider.js" />
+    <Content Include="Scripts\Block\jquery.js" />
+    <Content Include="Scripts\Block\jquery.validate.js" />
+    <Content Include="Scripts\Block\lineandbars.js" />
+    <Content Include="Scripts\Block\noty\jquery.noty.js" />
+    <Content Include="Scripts\Block\noty\layouts\bottom.js" />
+    <Content Include="Scripts\Block\noty\layouts\bottomCenter.js" />
+    <Content Include="Scripts\Block\noty\layouts\bottomLeft.js" />
+    <Content Include="Scripts\Block\noty\layouts\bottomRight.js" />
+    <Content Include="Scripts\Block\noty\layouts\center.js" />
+    <Content Include="Scripts\Block\noty\layouts\centerLeft.js" />
+    <Content Include="Scripts\Block\noty\layouts\centerRight.js" />
+    <Content Include="Scripts\Block\noty\layouts\inline.js" />
+    <Content Include="Scripts\Block\noty\layouts\top.js" />
+    <Content Include="Scripts\Block\noty\layouts\topCenter.js" />
+    <Content Include="Scripts\Block\noty\layouts\topLeft.js" />
+    <Content Include="Scripts\Block\noty\layouts\topRight.js" />
+    <Content Include="Scripts\Block\noty\promise.js" />
+    <Content Include="Scripts\Block\noty\themes\default.js" />
+    <Content Include="Theme\assets\manager\css\elfinder.css" />
+    <Content Include="Theme\assets\manager\css\elfinder.min.css" />
+    <Content Include="Theme\assets\manager\css\theme.css" />
+    <Content Include="Theme\assets\manager\files\Brian_May.jpg" />
+    <Content Include="Theme\assets\manager\files\LionLogoTheme.jpg" />
+    <Content Include="Theme\assets\manager\files\Lorem_Ipsum.txt" />
+    <Content Include="Theme\assets\manager\img\arrows-active.png" />
+    <Content Include="Theme\assets\manager\img\arrows-normal.png" />
+    <Content Include="Theme\assets\manager\img\crop.gif" />
+    <Content Include="Theme\assets\manager\img\dialogs.png" />
+    <Content Include="Theme\assets\manager\img\icons-big.png" />
+    <Content Include="Theme\assets\manager\img\icons-small.png" />
+    <Content Include="Theme\assets\manager\img\logo.png" />
+    <Content Include="Theme\assets\manager\img\progress.gif" />
+    <Content Include="Theme\assets\manager\img\quicklook-bg.png" />
+    <Content Include="Theme\assets\manager\img\quicklook-icons.png" />
+    <Content Include="Theme\assets\manager\img\resize.png" />
+    <Content Include="Theme\assets\manager\img\spinner-mini.gif" />
+    <Content Include="Theme\assets\manager\img\toolbar.png" />
+    <Content Include="Theme\assets\manager\js\elfinder.full.js" />
+    <Content Include="Theme\assets\manager\js\elfinder.min.js" />
+    <Content Include="Theme\assets\manager\js\i18n\elfinder.ar.js" />
+    <Content Include="Theme\assets\manager\js\i18n\elfinder.bg.js" />
+    <Content Include="Theme\assets\manager\js\i18n\elfinder.ca.js" />
+    <Content Include="Theme\assets\manager\js\i18n\elfinder.cs.js" />
+    <Content Include="Theme\assets\manager\js\i18n\elfinder.de.js" />
+    <Content Include="Theme\assets\manager\js\i18n\elfinder.es.js" />
+    <Content Include="Theme\assets\manager\js\i18n\elfinder.fr.js" />
+    <Content Include="Theme\assets\manager\js\i18n\elfinder.hu.js" />
+    <Content Include="Theme\assets\manager\js\i18n\elfinder.jp.js" />
+    <Content Include="Theme\assets\manager\js\i18n\elfinder.LANG.js" />
+    <Content Include="Theme\assets\manager\js\i18n\elfinder.nl.js" />
+    <Content Include="Theme\assets\manager\js\i18n\elfinder.no.js" />
+    <Content Include="Theme\assets\manager\js\i18n\elfinder.pl.js" />
+    <Content Include="Theme\assets\manager\js\i18n\elfinder.pt_BR.js" />
+    <Content Include="Theme\assets\manager\js\i18n\elfinder.ru.js" />
+    <Content Include="Theme\assets\manager\js\i18n\elfinder.zh_CN.js" />
+    <Content Include="Theme\assets\manager\js\proxy\elFinderSupportVer1.js" />
+    <Content Include="Theme\assets\manager\php\MySQLStorage.sql" />
+    <Content Include="Theme\calendar.html" />
+    <Content Include="Theme\index.html" />
+    <Content Include="Theme\login.html" />
+    <Content Include="Theme\manager.html" />
+    <Content Include="Theme\tables.html" />
+    <Content Include="Theme\user.html" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -305,6 +443,26 @@
     <Content Include="Views\Transactions\Details.cshtml" />
     <Content Include="Views\Transactions\Edit.cshtml" />
     <Content Include="Views\Transactions\Index.cshtml" />
+    <Content Include="Theme\.DS_Store" />
+    <Content Include="Theme\assets\.DS_Store" />
+    <Content Include="Theme\assets\css\.DS_Store" />
+    <Content Include="Content\Block\fonts\linecons.eot" />
+    <Content Include="Content\Block\fonts\linecons.ttf" />
+    <Content Include="Content\Block\fonts\linecons.woff" />
+    <Content Include="Content\Block\img\.DS_Store" />
+    <Content Include="Theme\assets\js\.DS_Store" />
+    <Content Include="Theme\assets\manager\php\connector.php" />
+    <Content Include="Theme\assets\manager\php\elFinder.class.php" />
+    <Content Include="Theme\assets\manager\php\elFinderConnector.class.php" />
+    <Content Include="Theme\assets\manager\php\elFinderVolumeDriver.class.php" />
+    <Content Include="Theme\assets\manager\php\elFinderVolumeLocalFileSystem.class.php" />
+    <Content Include="Theme\assets\manager\php\elFinderVolumeMySQL.class.php" />
+    <Content Include="Theme\assets\manager\php\mime.types" />
+    <Content Include="Views\BudgetItems\Create.cshtml" />
+    <Content Include="Views\BudgetItems\Delete.cshtml" />
+    <Content Include="Views\BudgetItems\Details.cshtml" />
+    <Content Include="Views\BudgetItems\Edit.cshtml" />
+    <Content Include="Views\BudgetItems\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -341,6 +499,11 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
+    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

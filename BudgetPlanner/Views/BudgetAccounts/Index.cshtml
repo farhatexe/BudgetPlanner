@@ -1,51 +1,69 @@
 ﻿@model IEnumerable<BudgetPlanner.Models.BudgetAccount>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Account Index";
 }
 
-<h2>Index</h2>
+<div class="container">
+    <div class="col-md-12">
+        <div class="col-md-4">
+            <div class="panel">
+                <div class="panel-heading">
+                    <div class="btn pull-left"><a href="@Url.Action("Create","BudgetAccounts")" class="glyphicon glyphicon-plus"> </a></div>                   
+                    <div class="text-center">
+                        <h4>
+                            @ViewBag.Household
+                            Household Accounts
+                        </h4>
+                    </div>
+                    </div>
+                <div class="panel-body">
+                    <table class="table">
+                        <tr>
+                            <th></th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Id)
+                            </th>
+                           <th>
+                                @Html.DisplayNameFor(model => model.Name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Balance)
+                            </th>
+                            
+                        </tr>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Household.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Balance)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ReconciledBalance)
-        </th>
-        <th></th>
-    </tr>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <a href="@Url.Action("Delete","BudgetAccounts",new{id=item.Id})" class="glyphicon glyphicon-trash"> </a>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Id)
+                                </td>
+                                <td>
+                                    @*@Html.DisplayFor(modelItem => item.Name)*@
+                                    <a href="@Url.Action("Index","Transactions",new{id=item.Id})"> @Html.DisplayFor(modelItem => item.Name) </a>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Balance)
+                                </td>
+                                @*<td>
+                                    
+                                    <a href="@Url.Action("Details","BudgetAccounts",new{id=item.Id})" class="glyphicon glyphicon-list"> </a>
+                                    
+                                </td>*@
+                            </tr>
+                        }
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Household.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Balance)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ReconciledBalance)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        
+    </div>
+</div>
 
-</table>
+
