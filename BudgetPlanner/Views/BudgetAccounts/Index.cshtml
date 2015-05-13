@@ -11,7 +11,7 @@
         <div class="col-md-6">
             <div class="panel">
                 <div class="panel-heading">
-                    <div class="btn pull-left"><a href="@Url.Action("Create","BudgetAccounts")" class="glyphicon glyphicon-plus"> </a></div>                   
+                    <div class="btn pull-left"><a href="@Url.Action("Create", "BudgetAccounts")" class="glyphicon glyphicon-plus"> </a></div>                   
                     <div class="text-center">
                         <h4>
                             @ViewBag.Household
@@ -48,7 +48,8 @@
                                 </td>
                                 <td>
                                     @*@Html.DisplayFor(modelItem => item.Name)*@
-                                    <a href="@Url.Action("Index","Transactions",new{id=item.Id})"> @Html.DisplayFor(modelItem => item.Name) </a>
+                                    <a href="@Url.Action("Index","Transactions",new{acctId=item.Id})"> @Html.DisplayFor(modelItem => item.Name) </a>
+
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Balance)

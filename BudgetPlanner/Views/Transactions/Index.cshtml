@@ -13,7 +13,7 @@
                 <div class="panel-heading">
                     <div class="col-md-12">
                         <div class="col-md-1">
-                            <div class="btn pull-left"><a href="@Url.Action("Create","Transactions")" class="glyphicon glyphicon-plus"> </a></div>
+                            <div class="btn pull-left"><a href="@Url.Action("Create", "Transactions", new { acctId = ViewBag.AccountId })" class="glyphicon glyphicon-plus"> </a></div>
                         </div>
                         <div class="col-md-8 text-center">
                             <h3>
@@ -75,9 +75,9 @@
                                             @Html.DisplayFor(modelItem => item.UpdateByUser.Name)
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("Edit","Transactions",new{id=item.Id})" class="glyphicon glyphicon-pencil"> </a>
-                                            <a href="@Url.Action("Details","Transactions",new{id=item.Id})" class="glyphicon glyphicon-list"> </a>
-                                            <a href="@Url.Action("Delete","Transactions",new{id=item.Id})" class="glyphicon glyphicon-trash"> </a>
+                                            <a href="@Url.Action("Edit","Transactions",new{id=item.Id, acctId = item.AccountId})" class="glyphicon glyphicon-pencil"> </a>
+                                            <a href="@Url.Action("Details", "Transactions", new { id = item.Id, acctId = item.AccountId})" class="glyphicon glyphicon-list"> </a>
+                                            <a href="@Url.Action("Delete", "Transactions", new { id = item.Id, acctId = item.AccountId})" class="glyphicon glyphicon-trash"> </a>
                                         </td>
                                     </tr>
                                 }

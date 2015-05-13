@@ -24,7 +24,7 @@
 
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-nav navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -37,16 +37,21 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@if (ViewBag.Title.Contains("Household"))
-                    { <text> class="active" </text>   }@Html.ActionLink("Household", "Index", "Household")</li>
-                    <li>@if (ViewBag.Title.Contains("Account"))
-                    { <text> class="active" </text>   }@Html.ActionLink("Accounts", "Index", "BudgetAccounts")</li>
-                    <li>@if (ViewBag.Title.Contains("Budget"))
-                    { <text> class="active" </text>   }@Html.ActionLink("Budget", "Index", "BudgetItems")</li>
-                    <li>@if (ViewBag.Title.Contains("Category"))
-                    { <text> class="active" </text>   }@Html.ActionLink("Categories", "Index", "Categories")</li>
-                    <li>@if (ViewBag.Title.Contains("Transaction"))
-                    { <text> class="active" </text>   }@Html.ActionLink("Transactions", "Index", "Transactions")</li>
+                    <li>
+                        <a href="@Url.Action("Index","Households")" @if (ViewBag.Title.Contains("Household")) { <text> class="active" </text> }>Household</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index","BudgetAccounts")" @if (ViewBag.Title.Contains("Account")) { <text> class="active" </text> }>Accounts</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index","Budget")" @if (ViewBag.Title.Contains("Budget")) { <text> class="active" </text> }>Budget</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index","Categories")" @if (ViewBag.Title.Contains("Category")) { <text> class="active" </text> }>Categories</a>
+                    </li>
+                    @*<li>
+                        <a href="@Url.Action("Index","Transactions")" @if (ViewBag.Title.Contains("Transaction")) { <text> class="active" </text> }>Transactions</a>
+                    </li>*@
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

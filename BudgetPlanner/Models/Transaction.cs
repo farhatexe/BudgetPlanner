@@ -12,7 +12,7 @@ namespace BudgetPlanner.Models
         public int AccountId { get; set; }
         public decimal Amount { get; set; }
         public decimal AbsAmount { get; set; }
-        public decimal ReconciledAmount { get; set; }
+        public decimal? ReconciledAmount { get; set; }
         public decimal AbsReconciledAmount { get; set; }
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         public DateTimeOffset Date { get; set; }

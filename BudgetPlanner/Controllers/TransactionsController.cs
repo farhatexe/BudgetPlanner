@@ -18,8 +18,9 @@ namespace BudgetPlanner.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Transactions
-        public ActionResult Index([DefaultValue(1)]int? acctId)
-        //public ActionResult Index()
+        //public ActionResult Index([DefaultValue(1)]int? acctId)
+        //[Route("Accounts/{acctId:int}/Transactions", Name="Transactions")]
+        public ActionResult Index(int acctId)
         {
             ViewBag.Balance = db.BudgetAccounts.FirstOrDefault(a => a.Id == acctId).Balance;
             ViewBag.reconBalance = db.BudgetAccounts.FirstOrDefault(a => a.Id == acctId).ReconciledBalance;
@@ -31,6 +32,7 @@ namespace BudgetPlanner.Controllers
         }
 
         // GET: Transactions/Details/5
+        //[Route("Accounts/{acctId:int}/Transactions/{id:int}", Name="TransactionDetails")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -46,9 +48,12 @@ namespace BudgetPlanner.Controllers
         }
 
         // GET: Transactions/Create
-        public ActionResult Create()
+        //[Route("Accounts/{acctId:int}/Transactions/Create", Name = "CreateTransaction")]
+        public ActionResult Create(int acctId)
         {
-            ViewBag.AccountId = new SelectList(db.BudgetAccounts, "Id", "Name");
+            ViewBag.Name = db.BudgetAccounts.FirstOrDefault(a => a.Id == acctId).Name;
+            ViewBag.AcctId = acctId;
+            ViewBag.AccountId = new SelectList(db.BudgetAccounts, "Id", "Name", acctId);
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name");
             return View();
         }
@@ -58,12 +63,14 @@ namespace BudgetPlanner.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,AccountId,Amount,AbsAmount,ReconciledAmount,AbsReconciledAmount,Date,Description,CategoryId")] Transaction transaction)
+        //[Route("Accounts/{acctId:int}/Transactions/Create")]
+        public ActionResult Create([Bind(Include = "Id,AccountId,Amount,AbsAmount,ReconciledAmount,AbsReconciledAmount,Date,Description,CategoryId")] Transaction transaction, int acctId)
         {
             if (ModelState.IsValid)
             {
+                transaction.AccountId = acctId;
                 var catId = transaction.CategoryId;
-                var acctId = transaction.AccountId;
+                //var acctId = transaction.AccountId;
                 var exp = false;
 
                 // determine if income or expense transaction 
@@ -85,17 +92,18 @@ namespace BudgetPlanner.Controllers
 
                 db.Transactions.Add(transaction);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { acctId });
             }
 
-            ViewBag.AccountId = new SelectList(db.BudgetAccounts, "Id", "Name", transaction.AccountId);
+            ViewBag.Name = db.BudgetAccounts.FirstOrDefault(a => a.Id == acctId).Name;
+            ViewBag.AccountId = new SelectList(db.BudgetAccounts, "Id", "Name", acctId);
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", transaction.CategoryId);
             return View(transaction);
         }
 
         // GET: Transactions/Edit/5
-        public ActionResult Edit(int? id, [DefaultValue(1)] int? acctId)
-        //public ActionResult Edit(int? id)
+        //[Route("Accounts/{acctId:int}/Transactions/{id:int}/Edit", Name = "EditTransaction")]
+        public ActionResult Edit(int? id, int acctId)
         {
             if (id == null)
             {
@@ -112,7 +120,7 @@ namespace BudgetPlanner.Controllers
             ViewBag.Balance = db.BudgetAccounts.FirstOrDefault(a => a.Id == acctId).Balance;
             ViewBag.reconBalance = db.BudgetAccounts.FirstOrDefault(a => a.Id == acctId).ReconciledBalance;
             ViewBag.Name = db.BudgetAccounts.FirstOrDefault(a => a.Id == acctId).Name;
-            ViewBag.AccountId = acctId;
+            ViewBag.AccountId = new SelectList(db.BudgetAccounts, "Id", "Name", acctId);
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", transaction.CategoryId);
             return View(transaction);
         }
@@ -122,13 +130,14 @@ namespace BudgetPlanner.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,AccountId,Amount,AbsAmount,ReconciledAmount,Date,Description,CategoryId,Reconciled")] Transaction transaction)
+        //[Route("Accounts/{acctId:int}/Transactions/{id:int}/Edit")]
+        public ActionResult Edit([Bind(Include = "Id,AccountId,Amount,AbsAmount,ReconciledAmount,Date,Description,CategoryId")] int acctId, Transaction transaction)
         {
             if (ModelState.IsValid)
             {
                 var userId = User.Identity.GetUserId();
                 var catId = transaction.CategoryId;
-                var acctId = transaction.AccountId;
+                //var acctId = transaction.AccountId;
                 var exp = false;
                 decimal balance = 0;
                 decimal reconBalance = 0;
@@ -188,16 +197,19 @@ namespace BudgetPlanner.Controllers
 
                 db.Entry(transaction).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { acctId });
             }
 
-            ViewBag.AccountId = new SelectList(db.BudgetAccounts, "Id", "Name", transaction.AccountId);
+            ViewBag.Balance = db.BudgetAccounts.FirstOrDefault(a => a.Id == transaction.AccountId).Balance;
+            ViewBag.reconBalance = db.BudgetAccounts.FirstOrDefault(a => a.Id == transaction.AccountId).ReconciledBalance;
+            ViewBag.Name = db.BudgetAccounts.FirstOrDefault(a => a.Id == transaction.AccountId).Name;
+            ViewBag.AccountId = new SelectList(db.BudgetAccounts, "Id", "Name", acctId);
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", transaction.CategoryId);
             return View(transaction);
         }
 
         // GET: Transactions/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int? id, int acctId)
         {
             if (id == null)
             {
@@ -209,20 +221,39 @@ namespace BudgetPlanner.Controllers
                 return HttpNotFound();
             }
 
-            // DO I NEED TO CHECK FOR RECONSILED FLAG?
-            // IF NOT RECONCILED, SHOULD AMOUNT BE ADDED BACK TO BALANCE?
+            ViewBag.AccountId = acctId;
             return View(transaction);
         }
 
         // POST: Transactions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int id, int acctId)
         {
             Transaction transaction = db.Transactions.Find(id);
+
+            decimal amount = transaction.Amount * -1;
+
+            // get account balance and reconciled balance
+            decimal balance = db.BudgetAccounts.FirstOrDefault(a => a.Id == acctId).Balance;
+            decimal reconBalance = db.BudgetAccounts.FirstOrDefault(a => a.Id == acctId).ReconciledBalance;
+
+            // adjust balance
+            balance += amount;
+            reconBalance += amount;
+
+            // update balance
+            BudgetAccount acctToUpdate = db.BudgetAccounts.FirstOrDefault(a => a.Id == acctId);
+            acctToUpdate.Balance = balance;
+
+            if (transaction.Reconciled == true)
+                acctToUpdate.ReconciledBalance = reconBalance;
+
+            db.Entry(acctToUpdate).State = EntityState.Modified;            
+
             db.Transactions.Remove(transaction);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { acctId });
         }
 
         protected override void Dispose(bool disposing)
