@@ -18,8 +18,8 @@ namespace BudgetPlanner.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Transactions
-        //public ActionResult Index([DefaultValue(1)]int? acctId)
-        //[Route("Accounts/{acctId:int}/Transactions", Name="Transactions")]
+
+        [Route("Accounts/{acctId:int}/Transactions", Name="TransactionIndex")]
         public ActionResult Index(int acctId)
         {
             ViewBag.Balance = db.BudgetAccounts.FirstOrDefault(a => a.Id == acctId).Balance;
@@ -32,8 +32,8 @@ namespace BudgetPlanner.Controllers
         }
 
         // GET: Transactions/Details/5
-        //[Route("Accounts/{acctId:int}/Transactions/{id:int}", Name="TransactionDetails")]
-        public ActionResult Details(int? id)
+        [Route("Accounts/{acctId:int}/Transactions/{id:int}", Name="TransactionDetails")]
+        public ActionResult Details(int? id, int acctId)
         {
             if (id == null)
             {
@@ -48,7 +48,7 @@ namespace BudgetPlanner.Controllers
         }
 
         // GET: Transactions/Create
-        //[Route("Accounts/{acctId:int}/Transactions/Create", Name = "CreateTransaction")]
+        [Route("Accounts/{acctId:int}/Transactions/Create", Name = "TransactionCreate")]
         public ActionResult Create(int acctId)
         {
             ViewBag.Name = db.BudgetAccounts.FirstOrDefault(a => a.Id == acctId).Name;
@@ -63,7 +63,7 @@ namespace BudgetPlanner.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[Route("Accounts/{acctId:int}/Transactions/Create")]
+        [Route("Accounts/{acctId:int}/Transactions/Create")]
         public ActionResult Create([Bind(Include = "Id,AccountId,Amount,AbsAmount,ReconciledAmount,AbsReconciledAmount,Date,Description,CategoryId")] Transaction transaction, int acctId)
         {
             if (ModelState.IsValid)
@@ -102,7 +102,7 @@ namespace BudgetPlanner.Controllers
         }
 
         // GET: Transactions/Edit/5
-        //[Route("Accounts/{acctId:int}/Transactions/{id:int}/Edit", Name = "EditTransaction")]
+        [Route("Accounts/{acctId:int}/Transactions/{id:int}/Edit", Name = "TransactionEdit")]
         public ActionResult Edit(int? id, int acctId)
         {
             if (id == null)
@@ -130,7 +130,7 @@ namespace BudgetPlanner.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[Route("Accounts/{acctId:int}/Transactions/{id:int}/Edit")]
+        [Route("Accounts/{acctId:int}/Transactions/{id:int}/Edit")]
         public ActionResult Edit([Bind(Include = "Id,AccountId,Amount,AbsAmount,ReconciledAmount,Date,Description,CategoryId")] int acctId, Transaction transaction)
         {
             if (ModelState.IsValid)
@@ -209,6 +209,7 @@ namespace BudgetPlanner.Controllers
         }
 
         // GET: Transactions/Delete/5
+        [Route("Accounts/{acctId:int}/Transactions/{id:int}/Delete", Name = "TransactionDelete")]
         public ActionResult Delete(int? id, int acctId)
         {
             if (id == null)
@@ -228,6 +229,7 @@ namespace BudgetPlanner.Controllers
         // POST: Transactions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Route("Accounts/{acctId:int}/Transactions/{id:int}/Delete")]
         public ActionResult DeleteConfirmed(int id, int acctId)
         {
             Transaction transaction = db.Transactions.Find(id);
@@ -255,6 +257,73 @@ namespace BudgetPlanner.Controllers
             db.SaveChanges();
             return RedirectToAction("Index", new { acctId });
         }
+
+        // datatable handler
+        //[HttpPost]
+        //[Route("Accounts/{acctId:int}/Transactions/Index")]
+        //public JsonResult AjaxHandler([ModelBinder(typeof(DataTablesBinder))] IDataTablesRequest param, int acctId)
+        //{
+        //    IQueryable<Transaction> filteredTransactions = db.Transactions.AsQueryable();
+
+        //    var user = db.Users.Single(u => u.UserName == User.Identity.Name);
+        //    var userId = User.Identity.GetUserId();
+
+        //    filteredTransactions = filteredTransactions.Where(t => t.AccountId == acctId);
+
+        //    var search = param.Search.Value;
+        //    if (!string.IsNullOrEmpty(search))
+        //    {
+        //        filteredTransactions = filteredTransactions
+        //            .Where(t=> t.Date.Equals(search) ||
+        //                t.Description.Contains(search) ||
+        //                t.Category.Name.Contains(search) ||
+        //                t.Amount.Equals(search)
+        //                );
+        //    }
+
+        //    var column = param.Columns.FirstOrDefault(r => r.IsOrdered == true);
+        //    if (column != null)
+        //    {
+        //        if (column.SortDirection == Column.OrderDirection.Descendant)
+        //        {
+        //            switch (column.Data)
+        //            {
+        //                case "Date": filteredTransactions = filteredTransactions.OrderByDescending(t => t.Date);
+        //                    break;
+        //                case "Description": filteredTransactions = filteredTransactions.OrderByDescending(t => t.Description);
+        //                    break;
+        //                case "Category": filteredTransactions = filteredTransactions.OrderByDescending(t => t.Category.Name);
+        //                    break;
+        //                case "Amount": filteredTransactions = filteredTransactions.OrderByDescending(t => t.Amount);
+        //                    break;
+        //                case "Reconciled": filteredTransactions = filteredTransactions.OrderByDescending(t => t.Reconciled);
+        //                    break;
+        //                case "UpdateByUser": filteredTransactions = filteredTransactions.OrderByDescending(t => t.UpdateByUser.Name);
+        //                    break;
+        //            }
+        //        }
+        //        else
+        //        {
+        //            switch (column.Data)
+        //            {
+        //                case "Date": filteredTransactions = filteredTransactions.OrderBy(t => t.Date);
+        //                    break;
+        //                case "Description": filteredTransactions = filteredTransactions.OrderBy(t => t.Description);
+        //                    break;
+        //                case "Category": filteredTransactions = filteredTransactions.OrderBy(t => t.Category.Name);
+        //                    break;
+        //                case "Amount": filteredTransactions = filteredTransactions.OrderBy(t => t.Amount);
+        //                    break;
+        //                case "Reconciled": filteredTransactions = filteredTransactions.OrderBy(t => t.Reconciled);
+        //                    break;
+        //                case "UpdateByUser": filteredTransactions = filteredTransactions.OrderBy(t => t.UpdateByUser.Name);
+        //                    break;
+        //            }
+        //        }
+        //    }
+        //    var result = filteredTransactions.Skip(param.Start).Take(param.Length).ToList().Select(t => new TransactionViewModel(t));
+        //    return Json(new DataTablesResponse(param.Draw, result, filteredTransactions.Count(), db.Transactions.Count()), JsonRequestBehavior.AllowGet);
+        //}
 
         protected override void Dispose(bool disposing)
         {

@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
 
-    <link href="/Content/Block/bootstrap.css" rel="stylesheet" />
 
     <link rel="shortcut icon" href="assets/ico/favicon.ico">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
+
+    <link href="~/Content/Block/main.css" rel="stylesheet" />
+    <link href="/Content/Block/bootstrap.css" rel="stylesheet" />
 
     <!-- Google Fonts call. Font Used Open Sans & Raleway -->
     <link href="http://fonts.googleapis.com/css?family=Raleway:400,300" rel="stylesheet" type="text/css">
@@ -24,6 +26,7 @@
 
 </head>
 <body>
+
     <div class="navbar-nav navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -38,13 +41,13 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="@Url.Action("Index","Households")" @if (ViewBag.Title.Contains("Household")) { <text> class="active" </text> }>Household</a>
+                        <a href="@Url.Action("Index","Home")" @if (ViewBag.Title.Contains("Household")) { <text> class="active" </text> }>Household</a>
                     </li>
                     <li>
                         <a href="@Url.Action("Index","BudgetAccounts")" @if (ViewBag.Title.Contains("Account")) { <text> class="active" </text> }>Accounts</a>
                     </li>
                     <li>
-                        <a href="@Url.Action("Index","Budget")" @if (ViewBag.Title.Contains("Budget")) { <text> class="active" </text> }>Budget</a>
+                        <a href="@Url.Action("Index","BudgetItems")" @if (ViewBag.Title.Contains("Budget")) { <text> class="active" </text> }>Budget</a>
                     </li>
                     <li>
                         <a href="@Url.Action("Index","Categories")" @if (ViewBag.Title.Contains("Category")) { <text> class="active" </text> }>Categories</a>
@@ -60,10 +63,18 @@
     <div class="container">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
     </div>
+    <div id="footerwrap">
+        <footer class="clearfix"></footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-lg-12">
+                    &copy; @DateTime.Now.Year - Budget Planner by Tom Setliff
+                </div>
+
+            </div><!-- /row -->
+        </div><!-- /container -->
+    </div><!-- /footerwrap -->
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

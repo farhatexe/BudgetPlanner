@@ -5,11 +5,12 @@ using System.Web;
 using System.Web.Mvc;
 
 namespace BudgetPlanner.Controllers
-{
+{   [Authorize]
     public class HomeController : Controller
     {
         public ActionResult Index()
         {
+            ViewBag.Title = "Household";
             return View();
         }
 

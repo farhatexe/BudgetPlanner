@@ -8,19 +8,15 @@ namespace BudgetPlanner.Models
     public class DashboardViewModel
     {
         public string HouseholdName { get; set; }
-        public string HouseholdUsers { get; set; }
-        public string AccountName { get; set; }
-        public decimal AccountBalance { get; set; }
-        public decimal BudgetAmount { get; set; }
-        public string BudgetIncExp { get; set; }
-        public decimal CatTransAmount { get; set; }
-        public decimal NotReconciledAmount { get; set; }
+        public IEnumerable<ApplicationUser> HouseholdUsers { get; set; }
+        public IEnumerable<BudgetAccount> Accounts { get; set; }
+        public IEnumerable<BudgetItem> Budgets { get; set; }
 
-        //public DashboadViewModel(Transaction transaction)
+        //public DashboardViewModel(Household household)
         //{
-
+        //    this.HouseholdName = household.Name;
+        //    this.HouseholdUsers = household.Users.SelectMany(u => u.HouseholdId = household.Id);
+        //    this.AccountName = household.BudgetAccounts.SelectMany(a => a.HouseholdId == household.Id);
         //}
-
-
     }
 }

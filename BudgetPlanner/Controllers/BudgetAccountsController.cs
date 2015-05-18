@@ -46,7 +46,10 @@ namespace BudgetPlanner.Controllers
         // GET: BudgetAccounts/Create
         public ActionResult Create()
         {
-            //ViewBag.HouseholdId = new SelectList(db.Household, "Id", "Name");
+            var userId = User.Identity.GetUserId();
+            var hhId = db.Users.First(u => u.Id == userId).HouseholdId;
+
+            ViewBag.Household = db.Household.First(h => h.Id == hhId).Name;
             return View();
         }
 
@@ -86,7 +89,11 @@ namespace BudgetPlanner.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.HouseholdId = new SelectList(db.Household, "Id", "Name", budgetAccount.HouseholdId);
+
+            var userId = User.Identity.GetUserId();
+            var hhId = db.Users.First(u => u.Id == userId).HouseholdId;
+
+            ViewBag.Household = db.Household.First(h => h.Id == hhId).Name;
             return View(budgetAccount);
         }
 

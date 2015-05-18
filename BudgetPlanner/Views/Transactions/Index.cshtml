@@ -4,6 +4,8 @@
     ViewBag.Title = "Transaction Index";
 }
 
+<link href="~/Content/Block/main.css" rel="stylesheet" />
+
 <div class="container">
     <br />
     <br />
@@ -11,85 +13,72 @@
         <div class="col-md-10">
             <div class="panel">
                 <div class="panel-heading">
-                    <div class="col-md-12">
-                        <div class="col-md-1">
-                            <div class="btn pull-left"><a href="@Url.Action("Create", "Transactions", new { acctId = ViewBag.AccountId })" class="glyphicon glyphicon-plus"> </a></div>
-                        </div>
-                        <div class="col-md-8 text-center">
-                            <h3>
-                                @ViewBag.Name
-                            </h3>
-                        </div>                      
-                        <div class="col-md-3">
-                            <h4>Balance: $@ViewBag.Balance</h4>
-                            <h4>Reconciled: $@ViewBag.reconBalance</h4>
-                        </div>
-                    </div>                   
+                    <div class="btn pull-left"><a href="@Url.Action("Create", "BudgetAccounts")" class="glyphicon glyphicon-plus"> </a></div>
+                    <div class="text-center">
+                        <h4>
+                            @ViewBag.Name
+                        </h4>
+                    </div>
                 </div>
                 <div class="panel-body">
-                    <div class="col-md-12">
-                        <table class="table">
-                            <thead>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Date)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Description)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Category.Name)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Amount)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Reconciled)
+                                </th>
+                                <th>
+                                    @Html.Label("Updated By")
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
                                 <tr>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Date)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Description)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Category.Name)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Amount)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Reconciled)
-                                    </th>
-                                    <th>
-                                        @Html.Label("Updated By")
-                                    </th>
-                                    <th></th>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Date)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Category.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Amount)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Reconciled)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.UpdateByUser.Name)
+                                    </td>
+                                    <td>
+                                        <a href="@Url.RouteUrl("TransactionEdit", new { id = item.Id, acctId = ViewBag.AccountId })" class="glyphicon glyphicon-pencil"> </a>
+                                        <a href="@Url.RouteUrl("TransactionDetails", new { id = item.Id, acctId = ViewBag.AccountId })" class="glyphicon glyphicon-list"> </a>
+                                        <a href="@Url.RouteUrl("TransactionDelete", new { id = item.Id, acctId = ViewBag.AccountId })" class="glyphicon glyphicon-trash"> </a>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model)
-                                {
-                                    <tr>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Date)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Description)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Category.Name)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Amount)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Reconciled)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.UpdateByUser.Name)
-                                        </td>
-                                        <td>
-                                            <a href="@Url.Action("Edit","Transactions",new{id=item.Id, acctId = item.AccountId})" class="glyphicon glyphicon-pencil"> </a>
-                                            <a href="@Url.Action("Details", "Transactions", new { id = item.Id, acctId = item.AccountId})" class="glyphicon glyphicon-list"> </a>
-                                            <a href="@Url.Action("Delete", "Transactions", new { id = item.Id, acctId = item.AccountId})" class="glyphicon glyphicon-trash"> </a>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>                           
-                        </table>
-                    </div>
-                    
-                </div>
-            </div>
-        </div>
-
-
-    </div>
-</div>
+                            }
+                        </tbody>
+                    </table>
+                </div> <!-- panel body -->
+            </div><!--panel-->
+        </div><!--col-md-10-->
+    </div><!-- col-md-12 -->
+</div> <!-- /container -->
 

@@ -70,10 +70,13 @@ namespace BudgetPlanner.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Household household = db.Household.Find(id);
+
             if (household == null)
             {
                 return HttpNotFound();
             }
+
+            ViewBag.Name = household.Name;
             return View(household);
         }
 
