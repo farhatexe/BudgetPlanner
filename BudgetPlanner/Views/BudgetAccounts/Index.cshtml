@@ -4,85 +4,63 @@
     ViewBag.Title = "Account Index";
 }
 
-<link href="~/Content/Block/main.css" rel="stylesheet" />
+@*<link href="~/Content/Block/main.css" rel="stylesheet" />*@
 
-<div class="container">
+@*<div class="container">*@
     <br />
     <br />
+<div class="row">
     <div class="col-md-12">
-        <div class="col-md-10">
-            <div class="panel">
-                <div class="panel-heading">
-                    <div class="btn pull-left"><a href="@Url.Action("Create", "BudgetAccounts")" class="glyphicon glyphicon-plus"> </a></div>
-                    <div class="text-center">
-                        <h4>
-                            @ViewBag.Household Household Accounts
-                        </h4>
-                    </div>
+        @*<div class="col-md-10">*@
+        <div class="panel">
+            <div class="panel-heading">
+                <div class="btn pull-left"><a href="@Url.Action("Create", "BudgetAccounts")" class="glyphicon glyphicon-plus"> </a></div>
+                <div class="text-center">
+                    <h4>
+                        @ViewBag.Household Household Accounts
+                    </h4>
                 </div>
-                <div class="panel-body">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Id)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Name)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Balance)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.ReconciledBalance)
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model)
-                            {
-                                <tr>
-                                    <td>
-                                        <a href="@Url.Action("Delete","BudgetAccounts",new{id=item.Id})" class="glyphicon glyphicon-trash"> </a>
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Id)
-                                    </td>
-                                    <td>
-                                        @*@Html.DisplayFor(modelItem => item.Name)*@
-                                        <a href="@Url.RouteUrl("TransactionIndex", new { acctId = item.Id })"> @Html.DisplayFor(modelItem => item.Name) </a>
-
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Balance)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.ReconciledBalance)
-                                    </td>
-                                    @*<td>
-
-                    <a href="@Url.Action("Details","BudgetAccounts",new{id=item.Id})" class="glyphicon glyphicon-list"> </a>
-
-                </td>*@
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div> <!-- panel body -->
-            </div><!--panel-->
-        </div><!--col-md-10-->
-    </div><!-- col-md-12 -->
-</div> <!-- /container -->
-
-<div id="footerwrap">
-    <footer class="clearfix"></footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12 col-lg-12">
-                &copy; @DateTime.Now.Year - Budget Planner by Tom Setliff
             </div>
-
-        </div><!-- /row -->
-    </div><!-- /container -->
-</div><!-- /footerwrap -->
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Balance)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ReconciledBalance)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <a href="@Url.Action("Delete","BudgetAccounts",new{id=item.Id})" class="glyphicon glyphicon-trash"> </a>
+                                </td>
+                                <td>
+                                    <a href="@Url.RouteUrl("TransactionIndex", new { acctId = item.Id })"> @Html.DisplayFor(modelItem => item.Name) </a>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Balance)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ReconciledBalance)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div> <!-- panel body -->
+        </div><!--panel-->
+        @*</div>*@<!--col-md-10-->
+    </div><!-- col-md-12 -->
+</div>
+    
+@*</div>*@ <!-- /container -->

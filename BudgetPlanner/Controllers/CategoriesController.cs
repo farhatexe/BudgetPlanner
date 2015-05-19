@@ -12,6 +12,7 @@ using BudgetPlanner.Models;
 namespace BudgetPlanner.Controllers
 {
     [Authorize]
+    [RequireHousehold]
     public class CategoriesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

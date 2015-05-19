@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace BudgetPlanner.Models
 {
@@ -11,17 +13,12 @@ namespace BudgetPlanner.Models
         public string Description { get; set; }
         public decimal Amount { get; set; }
         public string Category { get; set; }
-        public bool Reconciled { get; set; }
+        public string Reconciled { get; set; }
         public string UpdateBy { get; set; }
 
-        public TransactionViewModel(Transaction transaction)
+        public TransactionViewModel()
         {
-            this.Date = transaction.Date.ToString("d");
-            this.Description = "<a href=\"/Transaction/Edit/" + transaction.Id + "\">" + transaction.Description + "</a>";
-            this.Amount = transaction.Amount;
-            this.Category = transaction.Category.Name;
-            this.Reconciled = transaction.Reconciled;
-            this.UpdateBy = transaction.UpdateByUser.Name;
+
 
         }
     }

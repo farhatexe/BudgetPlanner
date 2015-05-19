@@ -13,6 +13,7 @@ using System.ComponentModel;
 namespace BudgetPlanner.Controllers
 {
     [Authorize]
+    [RequireHousehold]
     public class TransactionsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -120,7 +121,7 @@ namespace BudgetPlanner.Controllers
             ViewBag.Balance = db.BudgetAccounts.FirstOrDefault(a => a.Id == acctId).Balance;
             ViewBag.reconBalance = db.BudgetAccounts.FirstOrDefault(a => a.Id == acctId).ReconciledBalance;
             ViewBag.Name = db.BudgetAccounts.FirstOrDefault(a => a.Id == acctId).Name;
-            ViewBag.AccountId = new SelectList(db.BudgetAccounts, "Id", "Name", acctId);
+            ViewBag.AccountId = acctId;
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", transaction.CategoryId);
             return View(transaction);
         }
@@ -259,71 +260,79 @@ namespace BudgetPlanner.Controllers
         }
 
         // datatable handler
-        //[HttpPost]
-        //[Route("Accounts/{acctId:int}/Transactions/Index")]
-        //public JsonResult AjaxHandler([ModelBinder(typeof(DataTablesBinder))] IDataTablesRequest param, int acctId)
-        //{
-        //    IQueryable<Transaction> filteredTransactions = db.Transactions.AsQueryable();
+        [HttpPost]
+        [Route("Accounts/{acctId:int}/Transactions/Index", Name = "TransactionsTableAjax")]
+        public JsonResult AjaxHandler([ModelBinder(typeof(DataTablesBinder))] IDataTablesRequest param, int acctId)
+        {
+            IQueryable<Transaction> filteredTransactions = db.Transactions.AsQueryable();
 
-        //    var user = db.Users.Single(u => u.UserName == User.Identity.Name);
-        //    var userId = User.Identity.GetUserId();
+            var user = db.Users.Single(u => u.UserName == User.Identity.Name);
+            var userId = User.Identity.GetUserId();
 
-        //    filteredTransactions = filteredTransactions.Where(t => t.AccountId == acctId);
+            filteredTransactions = filteredTransactions.Where(t => t.AccountId == acctId);
 
-        //    var search = param.Search.Value;
-        //    if (!string.IsNullOrEmpty(search))
-        //    {
-        //        filteredTransactions = filteredTransactions
-        //            .Where(t=> t.Date.Equals(search) ||
-        //                t.Description.Contains(search) ||
-        //                t.Category.Name.Contains(search) ||
-        //                t.Amount.Equals(search)
-        //                );
-        //    }
+            var search = param.Search.Value;
+            if (!string.IsNullOrEmpty(search))
+            {
+                filteredTransactions = filteredTransactions
+                    .Where(t => t.Date.Equals(search) ||
+                        t.Description.Contains(search) ||
+                        t.Category.Name.Contains(search) ||
+                        t.Amount.Equals(search)
+                        );
+            }
 
-        //    var column = param.Columns.FirstOrDefault(r => r.IsOrdered == true);
-        //    if (column != null)
-        //    {
-        //        if (column.SortDirection == Column.OrderDirection.Descendant)
-        //        {
-        //            switch (column.Data)
-        //            {
-        //                case "Date": filteredTransactions = filteredTransactions.OrderByDescending(t => t.Date);
-        //                    break;
-        //                case "Description": filteredTransactions = filteredTransactions.OrderByDescending(t => t.Description);
-        //                    break;
-        //                case "Category": filteredTransactions = filteredTransactions.OrderByDescending(t => t.Category.Name);
-        //                    break;
-        //                case "Amount": filteredTransactions = filteredTransactions.OrderByDescending(t => t.Amount);
-        //                    break;
-        //                case "Reconciled": filteredTransactions = filteredTransactions.OrderByDescending(t => t.Reconciled);
-        //                    break;
-        //                case "UpdateByUser": filteredTransactions = filteredTransactions.OrderByDescending(t => t.UpdateByUser.Name);
-        //                    break;
-        //            }
-        //        }
-        //        else
-        //        {
-        //            switch (column.Data)
-        //            {
-        //                case "Date": filteredTransactions = filteredTransactions.OrderBy(t => t.Date);
-        //                    break;
-        //                case "Description": filteredTransactions = filteredTransactions.OrderBy(t => t.Description);
-        //                    break;
-        //                case "Category": filteredTransactions = filteredTransactions.OrderBy(t => t.Category.Name);
-        //                    break;
-        //                case "Amount": filteredTransactions = filteredTransactions.OrderBy(t => t.Amount);
-        //                    break;
-        //                case "Reconciled": filteredTransactions = filteredTransactions.OrderBy(t => t.Reconciled);
-        //                    break;
-        //                case "UpdateByUser": filteredTransactions = filteredTransactions.OrderBy(t => t.UpdateByUser.Name);
-        //                    break;
-        //            }
-        //        }
-        //    }
-        //    var result = filteredTransactions.Skip(param.Start).Take(param.Length).ToList().Select(t => new TransactionViewModel(t));
-        //    return Json(new DataTablesResponse(param.Draw, result, filteredTransactions.Count(), db.Transactions.Count()), JsonRequestBehavior.AllowGet);
-        //}
+            var column = param.Columns.FirstOrDefault(r => r.IsOrdered == true);
+            if (column != null)
+            {
+                if (column.SortDirection == Column.OrderDirection.Descendant)
+                {
+                    switch (column.Data)
+                    {
+                        case "Date": filteredTransactions = filteredTransactions.OrderByDescending(t => t.Date);
+                            break;
+                        case "Description": filteredTransactions = filteredTransactions.OrderByDescending(t => t.Description);
+                            break;
+                        case "Category": filteredTransactions = filteredTransactions.OrderByDescending(t => t.Category.Name);
+                            break;
+                        case "Amount": filteredTransactions = filteredTransactions.OrderByDescending(t => t.Amount);
+                            break;
+                        case "Reconciled": filteredTransactions = filteredTransactions.OrderByDescending(t => t.Reconciled);
+                            break;
+                        case "UpdateByUser": filteredTransactions = filteredTransactions.OrderByDescending(t => t.UpdateByUser.Name);
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (column.Data)
+                    {
+                        case "Date": filteredTransactions = filteredTransactions.OrderBy(t => t.Date);
+                            break;
+                        case "Description": filteredTransactions = filteredTransactions.OrderBy(t => t.Description);
+                            break;
+                        case "Category": filteredTransactions = filteredTransactions.OrderBy(t => t.Category.Name);
+                            break;
+                        case "Amount": filteredTransactions = filteredTransactions.OrderBy(t => t.Amount);
+                            break;
+                        case "Reconciled": filteredTransactions = filteredTransactions.OrderBy(t => t.Reconciled);
+                            break;
+                        case "UpdateByUser": filteredTransactions = filteredTransactions.OrderBy(t => t.UpdateByUser.Name);
+                            break;
+                    }
+                }
+            }
+            var urlHelper = new UrlHelper(Request.RequestContext);
+            var result = filteredTransactions.Skip(param.Start).Take(param.Length).ToList().Select(t => new TransactionViewModel() { 
+                Date = t.Date.ToString("d"),
+                Description = "<a href=\"" + urlHelper.RouteUrl("TransactionEdit", new { acctId = acctId, id = t.Id }) + "\">" + t.Description + "</a>",
+                Amount = t.Amount,
+                Category = t.Category.Name,
+                Reconciled = t.Reconciled == true ? "Yes" : "No",
+                UpdateBy = t.UpdateByUser != null ? t.UpdateByUser.Name : "",
+            });
+            return Json(new DataTablesResponse(param.Draw, result, filteredTransactions.Count(), db.Transactions.Count()), JsonRequestBehavior.AllowGet);
+        }
 
         protected override void Dispose(bool disposing)
         {
