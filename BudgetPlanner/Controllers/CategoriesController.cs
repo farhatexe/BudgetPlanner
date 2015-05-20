@@ -55,10 +55,8 @@ namespace BudgetPlanner.Controllers
             if (ModelState.IsValid)
             {
                 var userId = User.Identity.GetUserId();
-                var householdId = db.Users.FirstOrDefault(u => u.Id == userId).HouseholdId;
-
-                if (householdId.HasValue)
-                    category.HouseholdId = (int)householdId;
+                
+                category.HouseholdId = int.Parse(User.Identity.GetHouseholdId());
 
                 db.Categories.Add(category);
                 db.SaveChanges();

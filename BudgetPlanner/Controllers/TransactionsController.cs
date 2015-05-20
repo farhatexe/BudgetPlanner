@@ -12,7 +12,6 @@ using System.ComponentModel;
 
 namespace BudgetPlanner.Controllers
 {
-    [Authorize]
     [RequireHousehold]
     public class TransactionsController : Controller
     {
@@ -274,11 +273,16 @@ namespace BudgetPlanner.Controllers
             var search = param.Search.Value;
             if (!string.IsNullOrEmpty(search))
             {
+                //filteredTransactions = filteredTransactions
+                //    .Where(t => t.Date.Equals(search) ||
+                //        t.Description.Contains(search) ||
+                //        t.Category.Name.Contains(search) ||
+                //        t.Amount.Equals(search)  ||
+                //        t.Reconciled.Equals(search)
+                //        );
                 filteredTransactions = filteredTransactions
-                    .Where(t => t.Date.Equals(search) ||
-                        t.Description.Contains(search) ||
-                        t.Category.Name.Contains(search) ||
-                        t.Amount.Equals(search)
+                    .Where(t => t.Description.Contains(search) ||
+                        t.Category.Name.Contains(search)
                         );
             }
 

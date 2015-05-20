@@ -21,10 +21,10 @@ namespace BudgetPlanner.Controllers
         public ActionResult Index()
         {
             var userId = User.Identity.GetUserId();
-            var hhId = db.Users.First(u => u.Id == userId).HouseholdId;
+            var hhId = int.Parse(User.Identity.GetHouseholdId());
 
             var budgetAccounts = db.BudgetAccounts.Include(b => b.Household);
-            ViewBag.Household = db.Household.First(h => h.Id == hhId).Name;
+            ViewBag.Household = int.Parse(User.Identity.GetHouseholdId());
 
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name");
             var budgetItems = db.BudgetItems.Include(b => b.Category).Include(b => b.Household);
@@ -64,10 +64,8 @@ namespace BudgetPlanner.Controllers
             if (ModelState.IsValid)
             {
                 var userId = User.Identity.GetUserId();
-                var householdId = db.Users.FirstOrDefault(u => u.Id == userId).HouseholdId;
-
-                if (householdId.HasValue)
-                    budgetItem.HouseholdId = (int)householdId;
+                
+                budgetItem.HouseholdId = int.Parse(User.Identity.GetHouseholdId());
 
                 db.BudgetItems.Add(budgetItem);
                 db.SaveChanges();

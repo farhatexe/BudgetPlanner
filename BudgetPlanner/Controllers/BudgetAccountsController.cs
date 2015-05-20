@@ -21,7 +21,7 @@ namespace BudgetPlanner.Controllers
         public ActionResult Index()
         {
             var userId = User.Identity.GetUserId();
-            var hhId = db.Users.First(u=> u.Id == userId).HouseholdId;
+            var hhId = int.Parse(User.Identity.GetHouseholdId());
 
             var budgetAccounts = db.BudgetAccounts.Include(b => b.Household);
             ViewBag.Household = db.Household.First(h => h.Id == hhId).Name;
@@ -48,7 +48,7 @@ namespace BudgetPlanner.Controllers
         public ActionResult Create()
         {
             var userId = User.Identity.GetUserId();
-            var hhId = db.Users.First(u => u.Id == userId).HouseholdId;
+            var hhId = int.Parse(User.Identity.GetHouseholdId());
 
             ViewBag.Household = db.Household.First(h => h.Id == hhId).Name;
             return View();
@@ -64,10 +64,8 @@ namespace BudgetPlanner.Controllers
             if (ModelState.IsValid)
             {
                 var userId = User.Identity.GetUserId();
-                var householdId = db.Users.FirstOrDefault(u => u.Id == userId).HouseholdId;
 
-                if (householdId.HasValue)
-                    budgetAccount.HouseholdId = (int)householdId;
+                budgetAccount.HouseholdId = int.Parse(User.Identity.GetHouseholdId());
 
                 db.BudgetAccounts.Add(budgetAccount);
                 db.SaveChanges();
@@ -92,7 +90,7 @@ namespace BudgetPlanner.Controllers
             }
 
             var userId = User.Identity.GetUserId();
-            var hhId = db.Users.First(u => u.Id == userId).HouseholdId;
+            var hhId = int.Parse(User.Identity.GetHouseholdId());
 
             ViewBag.Household = db.Household.First(h => h.Id == hhId).Name;
             return View(budgetAccount);

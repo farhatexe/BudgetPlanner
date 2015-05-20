@@ -14,11 +14,11 @@ namespace BudgetPlanner.Models
     public static class AuthExtensions
     {
 
-     public static async Task RefreshAuthentication(this HttpContext context, ApplicationUser user)
-     {
-         context.GetOwinContext().Authentication.SignOut();
-         await context.GetOwinContext().Get<ApplicationSignInManager>().SignInAsync(user, isPersistent: false, rememberBrowser: false);
-     }
+        public static async Task RefreshAuthentication(this HttpContextBase context, ApplicationUser user)
+        {
+            context.GetOwinContext().Authentication.SignOut();
+            await context.GetOwinContext().Get<ApplicationSignInManager>().SignInAsync(user, isPersistent: false, rememberBrowser: false);
+        }
 
         public static string GetHouseholdId(this IIdentity user)
         {
@@ -30,8 +30,13 @@ namespace BudgetPlanner.Models
                 return null;
         }
 
-        
+        public static bool IsInHousehold(this IIdentity user)
+        {
+            var InHouseholdClaim = ((ClaimsIdentity)user).Claims.FirstOrDefault(c => c.Type == "HouseholdId");
+            return InHouseholdClaim != null && string.IsNullOrWhiteSpace(InHouseholdClaim.Value);
+        }
     }
+
     public class RequireHousehold : AuthorizeAttribute
         {
             protected override bool AuthorizeCore(HttpContextBase httpContext)
@@ -65,8 +70,9 @@ namespace BudgetPlanner.Models
                 else
                 {
                     filterContext.Result = new RedirectToRouteResult(new
-                        RouteValueDictionary(new { controller = "Household", action = "Create" }));
+                        RouteValueDictionary(new { controller = "Households", action = "Select" }));
                 }
             }
         }
+
 }

@@ -8,6 +8,11 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using BudgetPlanner.Models;
+using System.Threading.Tasks;
+using System.Configuration;
+using SendGrid;
+using System.Net.Mail;
+using System.IO;
 
 namespace BudgetPlanner.Controllers
 {
@@ -16,24 +21,24 @@ namespace BudgetPlanner.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Households
-        public ActionResult Index()
+        // GET: Households/Select
+        [Authorize]
+        public ActionResult Select()
         {
-            return View(db.Household.ToList());
+            ViewBag.Join = "";
+            ViewBag.Create = "";
+            return View();
         }
 
-        // GET: Households/Details/5
-        public ActionResult Details(int? id)
+
+        [RequireHousehold]
+        public ActionResult Display()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Household household = db.Household.Find(id);
-            if (household == null)
-            {
-                return HttpNotFound();
-            }
+            var hhId = int.Parse(User.Identity.GetHouseholdId());
+            var hhName = db.Household.FirstOrDefault(h => h.Id == hhId).Name;
+            ViewBag.Name = hhName;
+
+            var household = db.Household.Select(u => u.Id == hhId);
             return View(household);
         }
 
@@ -48,78 +53,123 @@ namespace BudgetPlanner.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name")] Household household)
+        public async Task<ActionResult> Create(FormCollection form)
         {
             var userId = User.Identity.GetUserId();
-            if (ModelState.IsValid)
+            var hhId = User.Identity.GetHouseholdId();
+            var name = form["Name"];
+
+            if (hhId == "")
             {
+                var household = new Household
+                {
+                    Name = name
+                };
                 db.Household.Add(household);
-                db.Users.FirstOrDefault(u => u.Id == userId).HouseholdId = household.Id;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+
+                var user = db.Users.Find(userId);
+                user.HouseholdId = db.Household.FirstOrDefault(h=> h.Name == name).Id;
+
+                db.SaveChanges();
+
+                // refresh cookie
+                await ControllerContext.HttpContext.RefreshAuthentication(user);
+
+                return RedirectToAction("Index","Home");
             }
 
-            return View(household);
+            ViewBag.Create = "You are already in a Household";
+            return RedirectToAction("Select");
         }
 
-        // GET: Households/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Household household = db.Household.Find(id);
-
-            if (household == null)
-            {
-                return HttpNotFound();
-            }
-
-            ViewBag.Name = household.Name;
-            return View(household);
-        }
-
-        // POST: Households/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Households/Invite
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name")] Household household)
+        public ActionResult Invite(FormCollection form)
         {
-            if (ModelState.IsValid)
-            {
-                db.Entry(household).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(household);
-        }
+            var email = form["Email"];
+            var userId = User.Identity.GetUserId();
+            var hhId = db.Invitations.FirstOrDefault(i => i.ToEmail == email).HouseholdId;
+            var hhName = db.Household.FirstOrDefault(h => h.Id == hhId).Name;
 
-        // GET: Households/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
+            var invitation = new Invitation
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Household household = db.Household.Find(id);
-            if (household == null)
-            {
-                return HttpNotFound();
-            }
-            return View(household);
-        }
+                FromUserId = userId,
+                ToEmail = email,
+                HouseholdId = hhId
+            };
 
-        // POST: Households/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Household household = db.Household.Find(id);
-            db.Household.Remove(household);
+            db.Invitations.Add(invitation);
             db.SaveChanges();
-            return RedirectToAction("Index");
+
+            // send invitation email
+            var myAddress = ConfigurationManager.AppSettings["ContactEmail"];
+            var myUserName = ConfigurationManager.AppSettings["UserName"];
+            var myPassword = ConfigurationManager.AppSettings["Password"];
+            var link = HttpContext.Request.Url.Scheme + "://" + HttpContext.Request.Url.Authority;
+
+            //SendGridMessage mail = new SendGridMessage();
+            //mail.From = new MailAddress(myAddress);
+            //mail.AddTo(email);
+            //mail.Subject = "Invitation to join Household";
+            //mail.Text = "You have been invited to join the " + hhName + " household Budget Planner. Click this link " + link + " to register";
+            //var credentials = new NetworkCredential(myUserName, myPassword);
+            //var transportWeb = new Web(credentials);
+            //transportWeb.Deliver(mail);
+
+            
+            return RedirectToAction("Display", "Households");
+
+        }   
+
+        // POST: Households/Leave
+        [HttpPost, ActionName("Leave")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Leave()
+        {
+
+            var userId = User.Identity.GetUserId();
+
+            // update user profile to remove household id
+            ApplicationUser user = db.Users.FirstOrDefault(u => u.Id == userId);
+            user.HouseholdId = null;
+            db.Entry(user).State = EntityState.Modified;
+            db.SaveChanges();
+
+            // refresh cookie to remove household
+            var removeuser = db.Users.Find(User.Identity.GetUserId());
+            await ControllerContext.HttpContext.RefreshAuthentication(removeuser);
+
+            return RedirectToAction("Select", "Households");
+
+        }
+
+        
+        // POST: Households/Join
+        [HttpPost, ActionName("Join")]
+        [ValidateAntiForgeryToken]
+        public ActionResult Join(FormCollection form)
+        {
+            // Need to check Invitations for user email address
+            // if found, then update user with Household
+
+            var email = form["Email"];
+            var userId = User.Identity.GetUserId();
+            var hhId = db.Invitations.FirstOrDefault(i => i.ToEmail == email).HouseholdId;
+
+            if(hhId != 0)
+            {
+                ApplicationUser user = db.Users.FirstOrDefault(u => u.Id == userId);
+                user.HouseholdId = hhId;
+                db.Entry(user).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index", "Home");
+            }
+
+            ViewBag.Join = "No Invitation was found for this Email";
+            ViewBag.Create = "";
+            return RedirectToAction("Select");
         }
 
         protected override void Dispose(bool disposing)

@@ -8,7 +8,11 @@
         <!-- USER PROFILE BLOCK -->
         <div class="col-sm-3 col-lg-3">
             <div class="dash-unit">
-                <dtitle>Household</dtitle>
+                <dtitle>
+                    <div class="col-md-2" >
+                        <a href="@Url.Action("Display","Home")" style="color:white ; font-size:16px">Household</a>
+                    </div>
+                </dtitle>                
                 <hr>
                 <div class="col-sm-8">
                     <h4>User name</h4>
@@ -19,7 +23,11 @@
         <!-- DONUT CHART BLOCK -->
         <div class="col-sm-3 col-lg-3">
             <div class="dash-unit">
-                <dtitle>Accounts</dtitle>
+                <dtitle>
+                    <div class="col-md-2">
+                        <a href="@Url.Action("Index","BudgetAccounts")" style="color:white ; font-size:16px">Accounts</a>
+                    </div>
+                </dtitle>                
                 <hr>
                 <div class="col-sm-4">
                     <h4>Account name</h4>
@@ -33,8 +41,12 @@
 
         <!-- DONUT CHART BLOCK -->
         <div class="col-sm-3 col-lg-3">
-            <div class="dash-unit">
-                <dtitle>Budget</dtitle>
+            <div class="dash-unit">                
+                <dtitle>
+                    <div class="col-md-2">
+                        <a href="@Url.Action("Index","BudgetItems")" style="color:white ; font-size:16px">Budget</a>
+                    </div>
+                </dtitle>
                 <hr>
                 <div class="col-sm-4">
                     <h4>Income name</h4>
@@ -46,9 +58,8 @@
             </div>
         </div>
 
+        <!-- LOCAL TIME BLOCK -->
         <div class="col-sm-3 col-lg-3">
-
-            <!-- LOCAL TIME BLOCK -->
             <div class="dash-unit">
                 <dtitle>Calendar</dtitle>
                 <hr>
@@ -159,9 +170,7 @@
                         </script>
                     </center>
                 </div>
-            </div>
-
-    
+            </div>    
         </div>
     </div><!-- /row -->
     

@@ -1,0 +1,123 @@
+﻿@model  BudgetPlanner.Models.Household
+
+@{
+    ViewBag.Title = "Display Household";
+}
+
+<br />
+<br />
+<div class="col-md-12">
+    <div class="col-md-6">
+        <div class="panel">
+            <div class="panel-heading">
+                <div class="col-md-12">
+                    <div class="col-md-5">
+                        <h4>
+                            Members
+                        </h4>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <br />
+                <div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    Name
+                                </th>
+                                <th>
+                                    Email
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (var user in Model.u)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.Display(user.Name)
+                                        </td>
+                                        <td>
+                                            @Html.Display(user.)
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                         </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel">
+            <div class="panel-heading">
+                <div class="col-md-12">
+                    <div class="col-md-8">
+                        <h4>
+                            Invite another user to join your household
+                        </h4>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <br />
+                @using (Html.BeginForm("Invite", "Households", FormMethod.Post,
+                    new { encType = "multipart/form-data", name = "myform" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>Email</label>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" name="Email" />
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="submit" value="Send Invitation" class="btn btn-default" />
+                        </div>
+                        <br />
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel">
+            <div class="panel-heading">
+                <div class="col-md-12">
+                    <div class="col-md-8">
+                        <h4>
+                            Leave this Household
+                        </h4>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <br />
+                @using (Html.BeginForm("Leave", "Households", FormMethod.Post,
+                    new { encType = "multipart/form-data", name = "myform" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.CheckBox("check")
+                                <p>I understand that I will no longer has access to this Household's Accounts</p>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="submit" value="Leave Household" class="btn btn-default" />
+                        </div>
+                        <br />
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
