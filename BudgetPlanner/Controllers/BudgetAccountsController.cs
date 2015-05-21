@@ -133,6 +133,9 @@ namespace BudgetPlanner.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            // Delete Transactions
+            //Transaction transactions = db.Transactions.SelectMany(t=> t.AccountId)
+            // Delete account
             BudgetAccount budgetAccount = db.BudgetAccounts.Find(id);
             db.BudgetAccounts.Remove(budgetAccount);
             db.SaveChanges();

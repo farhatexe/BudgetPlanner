@@ -10,23 +10,23 @@ namespace BudgetPlanner.Controllers
     public class HomeController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-
-        [RequireHousehold]
-        public ActionResult Dashboard()
-        {
-            var hhId = int.Parse(User.Identity.GetHouseholdId());
-            var hhName = db.Household.FirstOrDefault(h => h.Id == hhId).Name;
-            ViewBag.Name = hhName;
-
-            var household = db.Household.Select(h => h.Id == hhId);
-            return View(household);
-        }
-
+        
         [RequireHousehold]
         public ActionResult Index()
         {
-            ViewBag.Title = "Household";
-            return View();
+            var hhId = int.Parse(User.Identity.GetHouseholdId());
+            ViewBag.hhName = db.Household.FirstOrDefault(h => h.Id == hhId).Name;
+
+            var house = db.Household.FirstOrDefault(h => h.Id == hhId);
+
+            var model = new DashboardViewModel()
+            {
+                Accounts = house.BudgetAccounts.ToList(),
+                HouseholdUsers = house.Users.ToList(),
+                Budgets = house.BudgetItems.ToList()
+            };
+
+            return View(model);
         }
 
         public ActionResult About()

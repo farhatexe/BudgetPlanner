@@ -1,65 +1,154 @@
-﻿
+﻿@model BudgetPlanner.Models.DashboardViewModel
+
+@{
+    ViewBag.Title = "Dashboard Index";
+}
+
 @*<div class="container">*@
 <br />
 
     <!-- FIRST ROW OF BLOCKS -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center" id="headerwrap">
+                <h3>@ViewBag.hhName Household</h3>
+            </div>
+        </div>
+    </div>
     <div class="row">
-
-        <!-- USER PROFILE BLOCK -->
-        <div class="col-sm-3 col-lg-3">
+        <br />
+        <!-- Household user block -->
+        <div class="col-sm-4 col-lg-4">
             <div class="dash-unit">
-                <dtitle>
-                    <div class="col-md-2" >
-                        <a href="@Url.Action("Display","Home")" style="color:white ; font-size:16px">Household</a>
-                    </div>
-                </dtitle>                
-                <hr>
-                <div class="col-sm-8">
-                    <h4>User name</h4>
+                <div class="col-sm-12">
+                    <dtitle>
+                        @*<div class="col-sm-5">*@
+                            <a href="@Url.Action("Display","Households")" style="color:white ; font-size:16px">Household Members</a>
+                        @*</div>*@
+                    </dtitle>
                 </div>
+                <div class="col-sm-12">
+                    <hr>
+                    <dbody>
+                        <table>
+                            <thead>
+                                @*<tr>
+                                    <th class="col-md-6">
+                                        <label>Name</label>
+                                    </th>
+                                    <th class="col-md-6">
+                                        <label>Email</label>
+                                    </th>
+                                </tr>*@
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var item in Model.HouseholdUsers)
+                                    {
+                                        <tr>
+                                            <td class="col-md-6">
+                                                @Html.DisplayFor(modelItem => item.Name)
+                                            </td>
+                                            <td class="col-md-6">
+                                                @Html.DisplayFor(modelItem => item.Email)
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </dbody>
+                </div>
+                
             </div>
         </div>
 
-        <!-- DONUT CHART BLOCK -->
-        <div class="col-sm-3 col-lg-3">
+        <!-- ACCOUNTS BLOCK -->
+        <div class="col-sm-4 col-lg-4">
             <div class="dash-unit">
-                <dtitle>
-                    <div class="col-md-2">
+                <div class="col-sm-12">
+                    <dtitle>
+                        @*<div class="col-sm-5">*@
                         <a href="@Url.Action("Index","BudgetAccounts")" style="color:white ; font-size:16px">Accounts</a>
-                    </div>
-                </dtitle>                
-                <hr>
-                <div class="col-sm-4">
-                    <h4>Account name</h4>
+                        @*</div>*@
+                    </dtitle>
                 </div>
-                <div class="col-sm-3"></div>
-                <div class="col-sm-4">
-                    <h4>Account Balance</h4>
+                <div class="col-sm-12">
+                    <hr>
+                    <dbody>
+                        <table>
+                            <thead>
+                                @*<tr>
+                                    <th class="col-md-6">
+                                        <label>Name</label>
+                                    </th>
+                                    <th class="col-md-6">
+                                        <label>Email</label>
+                                    </th>
+                                </tr>*@
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var item in Model.Accounts)
+                                    {
+                                        <tr>
+                                            <td class="col-md-9">
+                                                @Html.DisplayFor(modelItem => item.Name)
+                                            </td>
+                                            <td class="col-md-3">
+                                                @Html.DisplayFor(modelItem => item.Balance)
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </dbody>
                 </div>
+
             </div>
         </div>
 
-        <!-- DONUT CHART BLOCK -->
-        <div class="col-sm-3 col-lg-3">
-            <div class="dash-unit">                
-                <dtitle>
-                    <div class="col-md-2">
+        <!-- BBUDGET BLOCK -->
+        <div class="col-sm-4 col-lg-4">
+            <div class="dash-unit">
+                <div class="col-sm-12">
+                    <dtitle>
+                        @*<div class="col-sm-5">*@
                         <a href="@Url.Action("Index","BudgetItems")" style="color:white ; font-size:16px">Budget</a>
-                    </div>
-                </dtitle>
-                <hr>
-                <div class="col-sm-4">
-                    <h4>Income name</h4>
+                        @*</div>*@
+                    </dtitle>
                 </div>
-                <div class="col-sm-3"></div>
-                <div class="col-sm-4">
-                    <h4>Income Total</h4>
+                <div class="col-sm-12">
+                    <hr>
+                    <dbody>
+                        <table>
+                            <thead>                                
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var item in Model.Budgets)
+                                    {
+                                        <tr>
+                                            <td class="col-md-9">
+                                                @Html.DisplayFor(modelItem => item.Description)
+                                            </td>
+                                            <td class="col-md-3">
+                                                @Html.DisplayFor(modelItem => item.Amount)
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </dbody>
                 </div>
+
             </div>
         </div>
 
         <!-- LOCAL TIME BLOCK -->
-        <div class="col-sm-3 col-lg-3">
+        @*<div class="col-sm-3 col-lg-3">
             <div class="dash-unit">
                 <dtitle>Calendar</dtitle>
                 <hr>
@@ -171,7 +260,7 @@
                     </center>
                 </div>
             </div>    
-        </div>
+        </div>*@
     </div><!-- /row -->
     
 @*</div>*@ <!-- /container -->

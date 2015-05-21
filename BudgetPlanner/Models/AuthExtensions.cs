@@ -33,7 +33,7 @@ namespace BudgetPlanner.Models
         public static bool IsInHousehold(this IIdentity user)
         {
             var InHouseholdClaim = ((ClaimsIdentity)user).Claims.FirstOrDefault(c => c.Type == "HouseholdId");
-            return InHouseholdClaim != null && string.IsNullOrWhiteSpace(InHouseholdClaim.Value);
+            return InHouseholdClaim != null && !string.IsNullOrWhiteSpace(InHouseholdClaim.Value);
         }
     }
 

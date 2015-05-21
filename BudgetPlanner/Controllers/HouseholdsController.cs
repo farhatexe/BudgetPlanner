@@ -38,7 +38,7 @@ namespace BudgetPlanner.Controllers
             var hhName = db.Household.FirstOrDefault(h => h.Id == hhId).Name;
             ViewBag.Name = hhName;
 
-            var household = db.Household.Select(u => u.Id == hhId);
+            Household household = db.Household.Find(hhId);
             return View(household);
         }
 
@@ -90,7 +90,7 @@ namespace BudgetPlanner.Controllers
         {
             var email = form["Email"];
             var userId = User.Identity.GetUserId();
-            var hhId = db.Invitations.FirstOrDefault(i => i.ToEmail == email).HouseholdId;
+            var hhId = int.Parse(User.Identity.GetHouseholdId());
             var hhName = db.Household.FirstOrDefault(h => h.Id == hhId).Name;
 
             var invitation = new Invitation
@@ -109,14 +109,14 @@ namespace BudgetPlanner.Controllers
             var myPassword = ConfigurationManager.AppSettings["Password"];
             var link = HttpContext.Request.Url.Scheme + "://" + HttpContext.Request.Url.Authority;
 
-            //SendGridMessage mail = new SendGridMessage();
-            //mail.From = new MailAddress(myAddress);
-            //mail.AddTo(email);
-            //mail.Subject = "Invitation to join Household";
-            //mail.Text = "You have been invited to join the " + hhName + " household Budget Planner. Click this link " + link + " to register";
-            //var credentials = new NetworkCredential(myUserName, myPassword);
-            //var transportWeb = new Web(credentials);
-            //transportWeb.Deliver(mail);
+            SendGridMessage mail = new SendGridMessage();
+            mail.From = new MailAddress(myAddress);
+            mail.AddTo(email);
+            mail.Subject = "Invitation to join Household";
+            mail.Text = "You have been invited to join the " + hhName + " household Budget Planner. Click this link " + link + " to register";
+            var credentials = new NetworkCredential(myUserName, myPassword);
+            var transportWeb = new Web(credentials);
+            transportWeb.DeliverAsync(mail);
 
             
             return RedirectToAction("Display", "Households");
@@ -149,7 +149,7 @@ namespace BudgetPlanner.Controllers
         // POST: Households/Join
         [HttpPost, ActionName("Join")]
         [ValidateAntiForgeryToken]
-        public ActionResult Join(FormCollection form)
+        public async Task<ActionResult> Join(FormCollection form)
         {
             // Need to check Invitations for user email address
             // if found, then update user with Household
@@ -160,10 +160,20 @@ namespace BudgetPlanner.Controllers
 
             if(hhId != 0)
             {
+                // update user household id
                 ApplicationUser user = db.Users.FirstOrDefault(u => u.Id == userId);
                 user.HouseholdId = hhId;
                 db.Entry(user).State = EntityState.Modified;
+
+                // remove invitation
+                Invitation userInvitation = db.Invitations.FirstOrDefault(i => i.ToEmail == email);
+                db.Invitations.Remove(userInvitation);
                 db.SaveChanges();
+
+                // refresh cookie to add household
+                var adduser = db.Users.Find(User.Identity.GetUserId());
+                await ControllerContext.HttpContext.RefreshAuthentication(adduser);
+
                 return RedirectToAction("Index", "Home");
             }
 

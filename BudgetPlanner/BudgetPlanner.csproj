@@ -237,7 +237,6 @@
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Column.cs" />
     <Compile Include="Models\ColumnCollection.cs" />
-    <Compile Include="Models\Dashboard.cs" />
     <Compile Include="Models\DashboardViewModel.cs" />
     <Compile Include="Models\DataTableParmModel.cs" />
     <Compile Include="Models\DataTablesBinder.cs" />
@@ -276,6 +275,12 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\images\favicon.ico" />
+    <Content Include="Content\images\sort_asc.png" />
+    <Content Include="Content\images\sort_asc_disabled.png" />
+    <Content Include="Content\images\sort_both.png" />
+    <Content Include="Content\images\sort_desc.png" />
+    <Content Include="Content\images\sort_desc_disabled.png" />
     <Content Include="Content\jquery.dataTables.css" />
     <Content Include="Content\jquery.dataTables.min.css" />
     <Content Include="Content\themes\base\accordion.css" />
@@ -321,6 +326,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\images\Sorting icons.psd" />
     <None Include="Properties\PublishProfiles\setlifft-budgetplanner - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\setlifft-budgetplanner - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
