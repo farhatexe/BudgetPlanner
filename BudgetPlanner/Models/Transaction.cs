@@ -25,5 +25,6 @@ namespace BudgetPlanner.Models
 
         public virtual Category Category { get; set; }
         public virtual ApplicationUser UpdateByUser { get; set; }
+        public virtual BudgetAccount Account { get; set; }
     }
 }

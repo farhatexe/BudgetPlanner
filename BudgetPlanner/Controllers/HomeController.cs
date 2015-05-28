@@ -16,6 +16,7 @@ namespace BudgetPlanner.Controllers
         {
             var hhId = int.Parse(User.Identity.GetHouseholdId());
             ViewBag.hhName = db.Household.FirstOrDefault(h => h.Id == hhId).Name;
+            var acctId = db.BudgetAccounts.FirstOrDefault(a => a.HouseholdId == hhId).Id;
 
             var house = db.Household.FirstOrDefault(h => h.Id == hhId);
 
@@ -23,7 +24,12 @@ namespace BudgetPlanner.Controllers
             {
                 Accounts = house.BudgetAccounts.ToList(),
                 HouseholdUsers = house.Users.ToList(),
-                Budgets = house.BudgetItems.ToList()
+                Transactions = db.Transactions.Where(t=> t.AccountId == acctId),
+                Budgets = house.BudgetItems.ToList(),
+
+                
+                //BudgetExpense = db.BudgetItems.Where(b => b.Category.Expense == true).Sum(a => a.Amount),
+                //BudgetIncome = db.BudgetItems.Where(b => b.Category.Income == true).Sum(a => a.Amount)
             };
 
             return View(model);

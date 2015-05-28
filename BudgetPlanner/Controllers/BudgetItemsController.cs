@@ -11,7 +11,7 @@ using BudgetPlanner.Models;
 
 namespace BudgetPlanner.Controllers
 {
-    [Authorize]
+
     [RequireHousehold]
     public class BudgetItemsController : Controller
     {
@@ -24,7 +24,7 @@ namespace BudgetPlanner.Controllers
             var hhId = int.Parse(User.Identity.GetHouseholdId());
 
             var budgetAccounts = db.BudgetAccounts.Include(b => b.Household);
-            ViewBag.Household = int.Parse(User.Identity.GetHouseholdId());
+            ViewBag.HhName = db.Household.FirstOrDefault(h=> h.Id == hhId).Name;
 
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name");
             var budgetItems = db.BudgetItems.Include(b => b.Category).Include(b => b.Household);

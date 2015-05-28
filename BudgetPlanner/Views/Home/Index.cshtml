@@ -22,9 +22,7 @@
             <div class="dash-unit">
                 <div class="col-sm-12">
                     <dtitle>
-                        @*<div class="col-sm-5">*@
-                            <a href="@Url.Action("Display","Households")" style="color:white ; font-size:16px">Household Members</a>
-                        @*</div>*@
+                        <a href="@Url.Action("Display","Households")" style="color:white ; font-size:16px">Household Members</a>
                     </dtitle>
                 </div>
                 <div class="col-sm-12">
@@ -32,14 +30,6 @@
                     <dbody>
                         <table>
                             <thead>
-                                @*<tr>
-                                    <th class="col-md-6">
-                                        <label>Name</label>
-                                    </th>
-                                    <th class="col-md-6">
-                                        <label>Email</label>
-                                    </th>
-                                </tr>*@
                             </thead>
                             <tbody>
                                 @{
@@ -64,13 +54,11 @@
         </div>
 
         <!-- ACCOUNTS BLOCK -->
-        <div class="col-sm-4 col-lg-4">
+        <div class="col-sm-3 col-lg-3">
             <div class="dash-unit">
                 <div class="col-sm-12">
                     <dtitle>
-                        @*<div class="col-sm-5">*@
                         <a href="@Url.Action("Index","BudgetAccounts")" style="color:white ; font-size:16px">Accounts</a>
-                        @*</div>*@
                     </dtitle>
                 </div>
                 <div class="col-sm-12">
@@ -78,14 +66,6 @@
                     <dbody>
                         <table>
                             <thead>
-                                @*<tr>
-                                    <th class="col-md-6">
-                                        <label>Name</label>
-                                    </th>
-                                    <th class="col-md-6">
-                                        <label>Email</label>
-                                    </th>
-                                </tr>*@
                             </thead>
                             <tbody>
                                 @{
@@ -105,162 +85,144 @@
                         </table>
                     </dbody>
                 </div>
-
             </div>
         </div>
 
-        <!-- BBUDGET BLOCK -->
-        <div class="col-sm-4 col-lg-4">
+        <!-- Transaction BLOCK -->
+        <div class="col-sm-5 col-lg-5">
             <div class="dash-unit">
                 <div class="col-sm-12">
                     <dtitle>
-                        @*<div class="col-sm-5">*@
-                        <a href="@Url.Action("Index","BudgetItems")" style="color:white ; font-size:16px">Budget</a>
-                        @*</div>*@
+                        <a href="@Url.Action("Index","BudgetAccounts")" style="color:white ; font-size:16px">Transactions</a>
                     </dtitle>
                 </div>
                 <div class="col-sm-12">
                     <hr>
-                    <dbody>
-                        <table>
-                            <thead>                                
-                            </thead>
-                            <tbody>
-                                @{
-                                    foreach (var item in Model.Budgets)
-                                    {
-                                        <tr>
-                                            <td class="col-md-9">
-                                                @Html.DisplayFor(modelItem => item.Description)
-                                            </td>
-                                            <td class="col-md-3">
-                                                @Html.DisplayFor(modelItem => item.Amount)
-                                            </td>
-                                        </tr>
-                                    }
+                    <table>
+                        <thead>
+                            <tr>
+                                <td class="col-md-3">
+                                    @Html.DisplayText("Account")
+                                </td>
+                                <td class="col-md-3">
+                                    @Html.DisplayText("Date")
+                                </td>
+                                <td class="col-md-4">
+                                    @Html.DisplayText("Category")
+                                </td>
+                                <td class="col-md-2">
+                                    @Html.DisplayText("Amount")
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (var item in Model.Transactions.OrderByDescending(t => t.Date).Take(5))
+                                {
+                                    <tr>
+                                        <td class="col-md-3">
+                                            @Html.DisplayFor(modelItem => item.Account.Name)
+                                        </td>
+                                        <td class="col-md-3">
+                                            @Html.DisplayFor(modelItem => item.Date)
+                                        </td>
+                                        <td class="col-md-4">
+                                            @Html.DisplayFor(modelItem => item.Category.Name)
+                                        </td>
+                                        <td class="col-md-2">
+                                            @Html.DisplayFor(modelItem => item.Amount)
+                                        </td>
+                                    </tr>
                                 }
-                            </tbody>
-                        </table>
-                    </dbody>
+                            }
+                        </tbody>
+                    </table>
                 </div>
-
             </div>
         </div>
-
-        <!-- LOCAL TIME BLOCK -->
-        @*<div class="col-sm-3 col-lg-3">
-            <div class="dash-unit">
-                <dtitle>Calendar</dtitle>
-                <hr>
-                <div class="clockcenter">
-                    <center>
-                        <script language="javascript" type="text/javascript">
-                            var day_of_week = new Array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
-                            var month_of_year = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
-
-                            //  DECLARE AND INITIALIZE VARIABLES
-                            var Calendar = new Date();
-
-                            var year = Calendar.getFullYear();     // Returns year
-                            var month = Calendar.getMonth();    // Returns month (0-11)
-                            var today = Calendar.getDate();    // Returns day (1-31)
-                            var weekday = Calendar.getDay();    // Returns day (1-31)
-
-                            var DAYS_OF_WEEK = 7;    // "constant" for number of days in a week
-                            var DAYS_OF_MONTH = 31;    // "constant" for number of days in a month
-                            var cal;    // Used for printing
-
-                            Calendar.setDate(1);    // Start the calendar day at '1'
-                            Calendar.setMonth(month);    // Start the calendar month at now
-
-
-                            /* VARIABLES FOR FORMATTING
-                            NOTE: You can format the 'BORDER', 'BGCOLOR', 'CELLPADDING', 'BORDERCOLOR'
-                                  tags to customize your caledanr's look. */
-
-                            var TR_start = '<TR>';
-                            var TR_end = '</TR>';
-                            var highlight_start = '<TD WIDTH="30"><TABLE CELLSPACING=0 BORDER=1 BGCOLOR=DEDEFF BORDERCOLOR=CCCCCC><TR><TD WIDTH=20><B><CENTER>';
-                            var highlight_end = '</CENTER></TD></TR></TABLE></B>';
-                            var TD_start = '<TD WIDTH="30"><CENTER>';
-                            var TD_end = '</CENTER></TD>';
-
-                            /* BEGIN CODE FOR CALENDAR
-                            NOTE: You can format the 'BORDER', 'BGCOLOR', 'CELLPADDING', 'BORDERCOLOR'
-                            tags to customize your calendar's look.*/
-
-                            cal = '<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=0 BORDERCOLOR=BBBBBB><TR><TD>';
-                            cal += '<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=2>' + TR_start;
-                            cal += '<TD COLSPAN="' + DAYS_OF_WEEK + '" BGCOLOR="#3d3d3d" COLOR="#333"><CENTER><B>';
-                            cal += month_of_year[month] + '   ' + year + '</B>' + TD_end + TR_end;
-                            cal += TR_start;
-
-                            //   DO NOT EDIT BELOW THIS POINT  //
-
-                            // LOOPS FOR EACH DAY OF WEEK
-                            for (index = 0; index < DAYS_OF_WEEK; index++) {
-
-                                // BOLD TODAY'S DAY OF WEEK
-                                if (weekday == index)
-                                    cal += TD_start + '<B>' + day_of_week[index] + '</B>' + TD_end;
-
-                                    // PRINTS DAY
-                                else
-                                    cal += TD_start + day_of_week[index] + TD_end;
-                            }
-
-                            cal += TD_end + TR_end;
-                            cal += TR_start;
-
-                            // FILL IN BLANK GAPS UNTIL TODAY'S DAY
-                            for (index = 0; index < Calendar.getDay() ; index++)
-                                cal += TD_start + '  ' + TD_end;
-
-                            // LOOPS FOR EACH DAY IN CALENDAR
-                            for (index = 0; index < DAYS_OF_MONTH; index++) {
-                                if (Calendar.getDate() > index) {
-                                    // RETURNS THE NEXT DAY TO PRINT
-                                    week_day = Calendar.getDay();
-
-                                    // START NEW ROW FOR FIRST DAY OF WEEK
-                                    if (week_day == 0)
-                                        cal += TR_start;
-
-                                    if (week_day != DAYS_OF_WEEK) {
-
-                                        // SET VARIABLE INSIDE LOOP FOR INCREMENTING PURPOSES
-                                        var day = Calendar.getDate();
-
-                                        // HIGHLIGHT TODAY'S DATE
-                                        if (today == Calendar.getDate())
-                                            cal += highlight_start + day + highlight_end + TD_end;
-
-                                            // PRINTS DAY
-                                        else
-                                            cal += TD_start + day + TD_end;
-                                    }
-
-                                    // END ROW FOR LAST DAY OF WEEK
-                                    if (week_day == DAYS_OF_WEEK)
-                                        cal += TR_end;
-                                }
-
-                                // INCREMENTS UNTIL END OF THE MONTH
-                                Calendar.setDate(Calendar.getDate() + 1);
-
-                            }// end for loop
-
-                            cal += '</TD></TR></TABLE></TABLE>';
-
-                            //  PRINT CALENDAR
-                            document.write(cal);
-
-                            //  End -->
-                        </script>
-                    </center>
-                </div>
-            </div>    
-        </div>*@
     </div><!-- /row -->
-    
-@*</div>*@ <!-- /container -->
+
+<!-- Chart BLOCK -->
+    <div class="row">        
+        <div class="col-sm-12 col-lg-12">
+            <div class="dash-unit" style="height:250px">
+                <div class="col-sm-12 text-center">
+                    <h3>Budget vs. Actual</h3>
+                </div>
+                <div class="col-sm-12 col-lg-12">
+                    <hr>
+                    <canvas id="barChart" width="1100" height="200"></canvas>
+                </div>
+                @*<div class="col-sm-6">
+                    <hr>
+                    <canvas id="actualChart" width="525" height="200"></canvas>                    
+                </div>*@
+            </div>
+        </div>
+    </div>
+
+<script>
+    var context = $("#barChart").get(0).getContext("2d");
+    var data =
+    {
+        labels: ["January", "February", "March", "April", "May", "June", "July"],
+        datasets: [
+            {
+                label: "My First dataset",
+                fillColor: "rgba(220,220,220,0.5)",
+                strokeColor: "rgba(220,220,220,0.8)",
+                highlightFill: "rgba(220,220,220,0.75)",
+                highlightStroke: "rgba(220,220,220,1)",
+                data: [65, 59, 80, 81, 56, 55, 40]
+            },
+            {
+                label: "My Second dataset",
+                fillColor: "rgba(151,187,205,0.5)",
+                strokeColor: "rgba(151,187,205,0.8)",
+                highlightFill: "rgba(151,187,205,0.75)",
+                highlightStroke: "rgba(151,187,205,1)",
+                data: [28, 48, 40, 19, 86, 27, 90]
+            }
+        ]
+    };
+
+    var options = {
+        //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+        scaleBeginAtZero: true,
+
+        //Boolean - Whether grid lines are shown across the chart
+        scaleShowGridLines: true,
+
+        //String - Colour of the grid lines
+        scaleGridLineColor: "rgba(0,0,0,.05)",
+
+        //Number - Width of the grid lines
+        scaleGridLineWidth: 1,
+
+        //Boolean - Whether to show horizontal lines (except X axis)
+        scaleShowHorizontalLines: true,
+
+        //Boolean - Whether to show vertical lines (except Y axis)
+        scaleShowVerticalLines: true,
+
+        //Boolean - If there is a stroke on each bar
+        barShowStroke: true,
+
+        //Number - Pixel width of the bar stroke
+        barStrokeWidth: 2,
+
+        //Number - Spacing between each of the X value sets
+        barValueSpacing: 5,
+
+        //Number - Spacing between data sets within X values
+        barDatasetSpacing: 1,
+
+        //String - A legend template
+        legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].fillColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
+
+    }
+
+    Chart.defaults.global.responsive = true;
+    var BarGraph = new Chart(context).Bar(data, options)
+
+</script>

@@ -64,14 +64,14 @@ namespace BudgetPlanner.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Accounts/{acctId:int}/Transactions/Create")]
-        public ActionResult Create([Bind(Include = "Id,AccountId,Amount,AbsAmount,ReconciledAmount,AbsReconciledAmount,Date,Description,CategoryId")] Transaction transaction, int acctId)
+        public ActionResult Create([Bind(Include = "Id,AccountId,Amount,AbsAmount,Reconciled,AbsReconciledAmount,Date,Description,CategoryId")] Transaction transaction, int acctId)
         {
             if (ModelState.IsValid)
             {
                 transaction.AccountId = acctId;
                 var catId = transaction.CategoryId;
-                //var acctId = transaction.AccountId;
                 var exp = false;
+                decimal reconBalance = 0;
 
                 // determine if income or expense transaction 
                 if (catId.HasValue)
@@ -83,11 +83,20 @@ namespace BudgetPlanner.Controllers
 
                 // update balance
                 var balance = db.BudgetAccounts.FirstOrDefault(a => a.Id == acctId).Balance;
+                reconBalance = db.BudgetAccounts.FirstOrDefault(a => a.Id == acctId).ReconciledBalance;
+
                 balance += transaction.Amount;
+
+                // if transaction just reconciled, then calculate reconciled balance
+                if (transaction.Reconciled == true)
+                {
+                    reconBalance += transaction.Amount;
+                };
 
                 // NEED TO UPDATE ACCOUNT WITH NEW BALANCE
                 BudgetAccount acctToUpdate = db.BudgetAccounts.FirstOrDefault(a => a.Id == acctId);
                 acctToUpdate.Balance = balance;
+                acctToUpdate.ReconciledBalance = reconBalance;
                 db.Entry(acctToUpdate).State = EntityState.Modified;
 
                 db.Transactions.Add(transaction);
@@ -137,7 +146,6 @@ namespace BudgetPlanner.Controllers
             {
                 var userId = User.Identity.GetUserId();
                 var catId = transaction.CategoryId;
-                //var acctId = transaction.AccountId;
                 var exp = false;
                 decimal balance = 0;
                 decimal reconBalance = 0;
@@ -334,6 +342,7 @@ namespace BudgetPlanner.Controllers
                 Category = t.Category.Name,
                 Reconciled = t.Reconciled == true ? "Yes" : "No",
                 UpdateBy = t.UpdateByUser != null ? t.UpdateByUser.Name : "",
+                //Delete = "<a href=\"" + urlHelper.RouteUrl("TransactionDelete", new { id = t.Id }) + "\">" + class="glyphicon glyphicon-trash" + "</a>"
             });
             return Json(new DataTablesResponse(param.Draw, result, filteredTransactions.Count(), db.Transactions.Count()), JsonRequestBehavior.AllowGet);
         }

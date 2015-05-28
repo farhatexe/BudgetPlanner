@@ -11,7 +11,6 @@ using BudgetPlanner.Models;
 
 namespace BudgetPlanner.Controllers
 {   
-    [Authorize]
     [RequireHousehold]
     public class BudgetAccountsController : Controller
     {

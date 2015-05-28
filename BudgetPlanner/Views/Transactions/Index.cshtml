@@ -16,7 +16,9 @@
             <div class="panel">
                 <div class="panel-heading">
                     <div class="col-md-1">
-                        <div class="btn pull-left"><a href="@Url.RouteUrl("TransactionCreate", new { acctId = ViewBag.AccountId })" class="glyphicon glyphicon-plus"> </a></div>
+                        <div class="btn pull-left">
+                            <a href="@Url.RouteUrl("TransactionCreate", new { acctId = ViewBag.AccountId })" class="glyphicon glyphicon-plus"> </a>
+                        </div>
                     </div>
                     <div class="col-md-7">
                         <div class="text-center">
@@ -31,6 +33,7 @@
                 </div>
                 <div class="panel-body">
                     <div class="col-md-12">
+                        
                         <table class="table table-hover table-striped table-responsive" id="TransactionDataTable" data-order='[[ 1, "asc"]]'>
                             <thead>
                                 <tr>
