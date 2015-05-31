@@ -4,8 +4,7 @@
     ViewBag.Title = "Transaction Index";
 }
 
-<link href="~/Content/Block/main.css" rel="stylesheet" />
-<link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="~/Content/jquery.dataTables.css" rel="stylesheet" />
 
 @*<div class="container">*@
     <br />
@@ -33,6 +32,15 @@
                 </div>
                 <div class="panel-body">
                     <div class="col-md-12">
+                        <div class="col-md-3">
+                            <p class="text-center">Date Range</p>
+                            <div class="input-daterange input-group" id="datepicker" style="width:250px">
+                                <input type="text" class="input-sm form-control" name="sdate" />
+                                <span class="input-group-addon">to</span>
+                                <input type="text" class="input-sm form-control" name="edate" />
+                            </div>
+                            <br />
+                        </div>
                         
                         <table class="table table-hover table-striped table-responsive" id="TransactionDataTable" data-order='[[ 1, "asc"]]'>
                             <thead>
@@ -66,7 +74,9 @@
         @*</div>*@<!--col-md-10-->
     </div><!-- col-md-12 -->
 </div> <!-- /row -->
+
 @section scripts {
+    <script src="/Scripts/bootstrap-datepicker.js"></script>
     <script src="/Scripts/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function () 
@@ -99,6 +109,14 @@
                             "data": "UpdateBy"
                         }
                     ]
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#datepicker .input-daterange').datepicker({
+                format: "dd/mm/yyyy",
+                autoclose: true
             });
         });
     </script>

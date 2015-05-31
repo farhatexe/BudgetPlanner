@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using BudgetPlanner.Models;
+using System.Data.Entity.SqlServer;
 
 namespace BudgetPlanner.Controllers
 {   
@@ -17,9 +18,11 @@ namespace BudgetPlanner.Controllers
             var hhId = int.Parse(User.Identity.GetHouseholdId());
             ViewBag.hhName = db.Household.FirstOrDefault(h => h.Id == hhId).Name;
             var acctId = db.BudgetAccounts.FirstOrDefault(a => a.HouseholdId == hhId).Id;
+            DateTime startDate = DateTime.Today;
+            DateTime endDate = DateTime.Today.AddDays(-30);
 
             var house = db.Household.FirstOrDefault(h => h.Id == hhId);
-
+            
             var model = new DashboardViewModel()
             {
                 Accounts = house.BudgetAccounts.ToList(),
@@ -32,21 +35,40 @@ namespace BudgetPlanner.Controllers
                 //BudgetIncome = db.BudgetItems.Where(b => b.Category.Income == true).Sum(a => a.Amount)
             };
 
+            
+
             return View(model);
         }
 
-        public ActionResult About()
+        [HttpPost]
+        public JsonResult GetChartData()
         {
-            ViewBag.Message = "Your application description page.";
+            var hhId = int.Parse(User.Identity.GetHouseholdId());
+            var acctId = db.BudgetAccounts.FirstOrDefault(a => a.HouseholdId == hhId).Id;
+            //DateTime startDate = DateTime.Today;
+            //DateTime endDate = DateTime.Today.AddDays(-30);
 
-            return View();
+            var house = db.Household.FirstOrDefault(h => h.Id == hhId);
+
+            // this needs to be set up in ajax call
+            // get chart data
+            var endPeriod = System.DateTime.Now.AddDays(31);
+            var data =
+                (
+                    from c in house.Categories
+                    select new
+                    {
+                        Name = c.Name,
+                        ActualAmount = (from t in c.Transactions
+                                        where t.Date <= endPeriod
+                                         select t.AbsAmount).DefaultIfEmpty().Sum(),
+                        //ActualAmount = c.Transactions.Where(t=> t.Date >= startDate && t.Date <= endDate).Select(t=> t.Amount).DefaultIfEmpty().Sum(),
+                        BudgetAmount = c.BudgetItems.Select(t => t.Amount).DefaultIfEmpty().Sum()
+                    }
+                );
+
+            return Json(data);
         }
 
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
     }
 }

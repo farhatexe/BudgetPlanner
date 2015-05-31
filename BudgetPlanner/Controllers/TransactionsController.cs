@@ -69,6 +69,7 @@ namespace BudgetPlanner.Controllers
             if (ModelState.IsValid)
             {
                 transaction.AccountId = acctId;
+                transaction.AbsAmount = transaction.Amount;
                 var catId = transaction.CategoryId;
                 var exp = false;
                 decimal reconBalance = 0;
@@ -166,6 +167,8 @@ namespace BudgetPlanner.Controllers
                     amtDifference = amtDifference + (oldTransaction.Amount - transaction.Amount);
                     oldAmount = oldTransaction.Amount * -1;
                 }
+
+                transaction.AbsAmount = transaction.Amount;
 
                 // determine if income or expense transaction 
                 if (catId.HasValue)

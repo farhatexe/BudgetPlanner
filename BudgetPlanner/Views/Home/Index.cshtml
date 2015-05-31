@@ -146,83 +146,79 @@
     <div class="row">        
         <div class="col-sm-12 col-lg-12">
             <div class="dash-unit" style="height:250px">
-                <div class="col-sm-12 text-center">
+                <div class="col-sm-12 text-center" id="barLegend">
                     <h3>Budget vs. Actual</h3>
                 </div>
                 <div class="col-sm-12 col-lg-12">
                     <hr>
                     <canvas id="barChart" width="1100" height="200"></canvas>
                 </div>
-                @*<div class="col-sm-6">
-                    <hr>
-                    <canvas id="actualChart" width="525" height="200"></canvas>                    
-                </div>*@
             </div>
         </div>
     </div>
 
 <script>
-    var context = $("#barChart").get(0).getContext("2d");
-    var data =
+    $(document).ready(function()
     {
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
-        datasets: [
+         var data =
+        {
+            labels: [],
+            datasets: [
+                {
+                    label: "Budget",
+                    fillColor: "rgba(220,220,220,0.5)",
+                    strokeColor: "rgba(220,220,220,0.8)",
+                    highlightFill: "rgba(220,220,220,0.75)",
+                    highlightStroke: "rgba(220,220,220,1)",
+                    data: []
+                },
+                {
+                    label: "Actual",
+                    fillColor: "rgba(151,187,205,0.5)",
+                    strokeColor: "rgba(151,187,205,0.8)",
+                    highlightFill: "rgba(151,187,205,0.75)",
+                    highlightStroke: "rgba(151,187,205,1)",
+                    data: []
+                }
+            ]
+        };
+
+         var options = {
+             scaleBeginAtZero: true,  //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+             scaleShowGridLines: true,   //Boolean - Whether grid lines are shown across the chart
+             scaleGridLineColor: "rgba(0,0,0,.05)",  //String - Colour of the grid lines
+             scaleGridLineWidth: 1,  //Number - Width of the grid lines
+             scaleShowHorizontalLines: true, //Boolean - Whether to show horizontal lines (except X axis)
+             scaleShowVerticalLines: true,   //Boolean - Whether to show vertical lines (except Y axis)
+             barShowStroke: true,    //Boolean - If there is a stroke on each bar
+             barStrokeWidth: 2,  //Number - Pixel width of the bar stroke
+             barValueSpacing: 5, //Number - Spacing between each of the X value sets
+             barDatasetSpacing: 1,   //Number - Spacing between data sets within X values
+             legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].fillColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
+
+         }
+
+        $.post("@Url.Action("GetChartData", "Home")").then(function (response)
+        {
+            for (i = 0; i < response.length; i++) 
             {
-                label: "My First dataset",
-                fillColor: "rgba(220,220,220,0.5)",
-                strokeColor: "rgba(220,220,220,0.8)",
-                highlightFill: "rgba(220,220,220,0.75)",
-                highlightStroke: "rgba(220,220,220,1)",
-                data: [65, 59, 80, 81, 56, 55, 40]
-            },
-            {
-                label: "My Second dataset",
-                fillColor: "rgba(151,187,205,0.5)",
-                strokeColor: "rgba(151,187,205,0.8)",
-                highlightFill: "rgba(151,187,205,0.75)",
-                highlightStroke: "rgba(151,187,205,1)",
-                data: [28, 48, 40, 19, 86, 27, 90]
+                data.labels.push(response[i].Name);
+                data.datasets[0].data.push(response[i].BudgetAmount);
+                if(response[i].ActualAmount < 0)
+                    data.datasets[1].data.push(response[i].ActualAmount);
+                else
+                    data.datasets[1].data.push(response[i].ActualAmount);
             }
-        ]
-    };
 
-    var options = {
-        //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
-        scaleBeginAtZero: true,
+            Chart.defaults.global.scaleFontColor="white";
+            var context = $("#barChart").get(0).getContext("2d");
+            window.barChart = new Chart(context).Bar(data,responsive = true)
+            window.barChart.update;
 
-        //Boolean - Whether grid lines are shown across the chart
-        scaleShowGridLines: true,
+            //document.getElementById('barLegend').innerHTML = barChart.generateLegend();
+        })
 
-        //String - Colour of the grid lines
-        scaleGridLineColor: "rgba(0,0,0,.05)",
 
-        //Number - Width of the grid lines
-        scaleGridLineWidth: 1,
-
-        //Boolean - Whether to show horizontal lines (except X axis)
-        scaleShowHorizontalLines: true,
-
-        //Boolean - Whether to show vertical lines (except Y axis)
-        scaleShowVerticalLines: true,
-
-        //Boolean - If there is a stroke on each bar
-        barShowStroke: true,
-
-        //Number - Pixel width of the bar stroke
-        barStrokeWidth: 2,
-
-        //Number - Spacing between each of the X value sets
-        barValueSpacing: 5,
-
-        //Number - Spacing between data sets within X values
-        barDatasetSpacing: 1,
-
-        //String - A legend template
-        legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].fillColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
-
-    }
-
-    Chart.defaults.global.responsive = true;
-    var BarGraph = new Chart(context).Bar(data, options)
-
+    })
+ 
 </script>
