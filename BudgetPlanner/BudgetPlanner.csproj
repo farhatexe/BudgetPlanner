@@ -235,23 +235,14 @@
     <Compile Include="Models\BudgetAccount.cs" />
     <Compile Include="Models\BudgetItem.cs" />
     <Compile Include="Models\Category.cs" />
-    <Compile Include="Models\Column.cs" />
-    <Compile Include="Models\ColumnCollection.cs" />
     <Compile Include="Models\DashboardViewModel.cs" />
-    <Compile Include="Models\DataTableParmModel.cs" />
-    <Compile Include="Models\DataTablesBinder.cs" />
-    <Compile Include="Models\DataTablesJsonBinder.cs" />
-    <Compile Include="Models\DataTablesResponse.cs" />
-    <Compile Include="Models\DefaultDataTablesRequest.cs" />
     <Compile Include="Models\Household.cs" />
     <Compile Include="Models\HouseholdViewModel.cs" />
-    <Compile Include="Models\IDataTablesRequest.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Invitation.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\NameValueCollectionExtensions.cs" />
-    <Compile Include="Models\Search.cs" />
     <Compile Include="Models\Transaction.cs" />
+    <Compile Include="Models\TransactionSearchDataTablesBinder.cs" />
     <Compile Include="Models\TransactionViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -275,6 +266,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\images\favicon.ico" />
     <Content Include="Content\images\sort_asc.png" />
     <Content Include="Content\images\sort_asc_disabled.png" />
@@ -327,6 +319,9 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\images\Sorting icons.psd" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
     <None Include="Properties\PublishProfiles\setlifft-budgetplanner - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\setlifft-budgetplanner - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
@@ -600,6 +595,12 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\datatables.mvc-master\DataTables.Mvc\DataTables.Mvc.csproj">
+      <Project>{431adb89-3da0-4e18-9af0-984b917e6eb8}</Project>
+      <Name>DataTables.Mvc</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

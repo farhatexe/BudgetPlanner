@@ -28,7 +28,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BudgetPlanner.Models
+namespace DataTables.Mvc
 {
     /// <summary>
     /// Represents a read-only DataTables column collection.

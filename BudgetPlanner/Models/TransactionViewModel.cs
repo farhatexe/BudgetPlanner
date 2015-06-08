@@ -15,6 +15,7 @@ namespace BudgetPlanner.Models
         public string Category { get; set; }
         public string Reconciled { get; set; }
         public string UpdateBy { get; set; }
+       // public string Delete { get; set; }
 
         public TransactionViewModel()
         {

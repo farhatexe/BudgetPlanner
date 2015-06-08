@@ -18,13 +18,13 @@
     <link href="http://fonts.googleapis.com/css?family=Raleway:400,300" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
 
-    <script src="~/Scripts/jquery-2.1.3.min.js"></script>
 
-    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/css")    
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/Chart")
 
+    @*<script src="~/Scripts/jquery-2.1.3.min.js"></script>*@
     <link href="/Content/Block/bootstrap.css" rel="stylesheet" />
     <link href="~/Content/Block/main.css" rel="stylesheet" />
     <link href="~/Content/bootstrap-datepicker.css" rel="stylesheet" />
@@ -71,20 +71,20 @@
         <hr />
     </div>
     <div class="container">
-        <div id="footerwrap">
-            <footer class="clearfix"></footer>
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-12 col-lg-12">
-                        &copy; @DateTime.Now.Year - Budget Planner by Tom Setliff
-                    </div>
+        <div id=" footerwrap">
+        <footer class="clearfix"></footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-lg-12">
+                    &copy; @DateTime.Now.Year - Budget Planner by Tom Setliff
+                </div>
 
-                </div><!-- /row -->
-            </div><!-- /container -->
-        </div><!-- /footerwrap -->
+            </div><!-- /row -->
+        </div><!-- /container -->
+    </div><!-- /footerwrap -->
     </div>
     
-    @Scripts.Render("~/bundles/jquery")
+    @*@Scripts.Render("~/bundles/jquery")*@
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>

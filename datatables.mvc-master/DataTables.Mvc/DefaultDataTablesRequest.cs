@@ -26,34 +26,34 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace BudgetPlanner.Models
+namespace DataTables.Mvc
 {
     /// <summary>
-    /// Stores parameters and configs from DataTables search engine.
+    /// Implements a default DataTables request.
     /// </summary>
-    public class Search
+    public class DefaultDataTablesRequest : IDataTablesRequest
     {
         /// <summary>
-        /// Gets the value of the search.
+        /// Gets/Sets the draw counter from DataTables.
         /// </summary>
-        public string Value { get; private set; }
+        public virtual int Draw { get; set; }
         /// <summary>
-        /// Indicates if the value of the search is a regex value or not.
+        /// Gets/Sets the start record number (jump) for paging.
         /// </summary>
-        public bool IsRegexValue { get; private set; }
+        public virtual int Start { get; set; }
         /// <summary>
-        /// Creates a new search values holder object.
+        /// Gets/Sets the length of the page (paging).
         /// </summary>
-        /// <param name="value">The value of the search.</param>
-        /// <param name="isRegexValue">True if the value is a regex value or false otherwise.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown when the provided search value is null.</exception>
-        public Search(string value, bool isRegexValue)
-        {
-            if (value == null) throw new ArgumentNullException("value", "The value of the search cannot be null. If there's no search performed, provide an empty string.");
-            
-            this.Value = value;
-            this.IsRegexValue = isRegexValue;
-        }
+        public virtual int Length { get; set; }
+        /// <summary>
+        /// Gets/Sets the global search term.
+        /// </summary>
+        public virtual Search Search { get; set; }
+        /// <summary>
+        /// Gets/Sets the column collection.
+        /// </summary>
+        public virtual ColumnCollection Columns { get; set; }
     }
 }

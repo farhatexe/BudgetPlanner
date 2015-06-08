@@ -12,21 +12,25 @@
             <h3 style="color:white">@ViewBag.Name Household</h3>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="panel">
-                <div class="panel-heading">
-                    <div class="col-md-12">
+
+    @* Show Household users *@
+    <div class="col-md-6">
+        <div class="panel">
+            <div class="panel-heading">
+                <div class="col-md-12">
+                    <div class="row">
                         <div class="col-md-5">
                             <h4>
                                 Members
                             </h4>
                         </div>
                     </div>
-                </div>
-                <div class="panel-body">
-                    <br />
-                    <div class="col-md-12">
+                </div>                
+            </div>
+            <div class="panel-body">
+                <br />
+                <div class="col-md-12">
+                    <div class="row">
                         <table>
                             <thead>
                                 <tr>
@@ -55,83 +59,123 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
-                <div class="panel-footer"></div>
+                </div>                
             </div>
+            <div class="panel-footer"></div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="panel">
-                <div class="panel-heading">
-                    <div class="col-md-12">
-                        <div class="col-md-8">
-                            <h4>
-                                Invite another user to join your household
-                            </h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel-body">
-                    <br />
-                    @using (Html.BeginForm("Invite", "Households", FormMethod.Post,
-                    new { encType = "multipart/form-data", name = "myform" }))
-                    {
-                        @Html.AntiForgeryToken()
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <label>Email</label>
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="text" name="Email" />
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <input type="submit" value="Send Invitation" class="btn btn-default" />
-                            </div>
-                            <br />
-                        </div>
-                    }
-                </div>
-                <div class="panel-footer"></div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="panel">
-                <div class="panel-heading">
-                    <div class="col-md-12">
+
+        @* Leave Household *@
+        <div class="panel">
+            <div class="panel-heading">
+                <div class="col-md-12">
+                    <div class="row">
                         <div class="col-md-8">
                             <h4>
                                 Leave this Household
                             </h4>
                         </div>
-                    </div>
+                    </div>                    
                 </div>
-                <div class="panel-body">
-                    <br />
-                    @using (Html.BeginForm("Leave", "Households", FormMethod.Post,
+            </div>
+            <div class="panel-body">
+                <br />
+                @using (Html.BeginForm("Leave", "Households", FormMethod.Post,
                     new { encType = "multipart/form-data", name = "myform" }))
-                    {
-                        @Html.AntiForgeryToken()
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    @Html.CheckBox("check")
-                                    <p>I understand that I will no longer has access to this Household's Accounts</p>
-                                </div>
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.CheckBox("check")
+                                <p>I understand that I will no longer have access to this Household's Accounts</p>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-2">
                                 <input type="submit" value="Leave Household" class="btn btn-default" />
                             </div>
-                            <br />
-                        </div>
-                    }
-                </div>
-                <div class="panel-footer"></div>
+                        </div>                        
+                        <br />
+                    </div>
+                }
             </div>
+            <div class="panel-footer"></div>
         </div>
-    </div>    
+    </div>
+
+    @* Invite users / show open invitations *@
+    <div class="col-md-6">
+        <div class="panel">
+            <div class="panel-heading">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h4>
+                                Invite another user to join your household
+                            </h4>
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+            <div class="panel-body">
+                <br />
+                @using (Html.BeginForm("Invite", "Households", FormMethod.Post,
+                new { encType = "multipart/form-data", name = "myform" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>Email</label>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" name="Email" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <input type="submit" value="Send Invitation" class="btn btn-default" />
+                            </div>
+                        </div>                       
+                        <br />
+                    </div>
+                }
+
+                <div class="col-md-12">
+                    <div class="row">
+                        <h4 class="text-center"><b>Open Invitations</b></h4>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="col-md-6">
+                                    <label>Invited By</label>
+                                </th>
+                                <th class="col-md-6">
+                                    <label>Invitation Email</label>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (var user in Model.Invitations)
+                                {
+                                    <tr>
+                                        <td class="col-md-6">
+                                            @Html.DisplayFor(modelItem => user.FromUser.Name)
+                                        </td>
+                                        <td class="col-md-6">
+                                            @Html.DisplayFor(modelItem => user.ToEmail)
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="panel-footer">                
+            </div>                   
+        </div>
+    </div>
 </div>

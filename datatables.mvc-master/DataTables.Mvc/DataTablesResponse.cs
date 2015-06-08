@@ -23,37 +23,50 @@ THE SOFTWARE.
 */
 #endregion Copyright
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace BudgetPlanner.Models
+namespace DataTables.Mvc
 {
     /// <summary>
-    /// Implements a default DataTables request.
+    /// Represents a server-side response for use with DataTables.
     /// </summary>
-    public class DefaultDataTablesRequest : IDataTablesRequest
+    /// <remarks>
+    /// Variable syntax matches DataTables names to avoid error and avoid aditional parse.
+    /// </remarks>
+    public class DataTablesResponse
     {
         /// <summary>
-        /// Gets/Sets the draw counter from DataTables.
+        /// Gets the draw counter for DataTables.
         /// </summary>
-        public virtual int Draw { get; set; }
+        public int draw { get; private set; }
         /// <summary>
-        /// Gets/Sets the start record number (jump) for paging.
+        /// Gets the data collection.
         /// </summary>
-        public virtual int Start { get; set; }
+        public IEnumerable data { get; private set; }
         /// <summary>
-        /// Gets/Sets the length of the page (paging).
+        /// Gets the total number of records (without filtering - total dataset).
         /// </summary>
-        public virtual int Length { get; set; }
+        public int recordsTotal { get; private set; }
         /// <summary>
-        /// Gets/Sets the global search term.
+        /// Gets the resulting number of records after filtering.
         /// </summary>
-        public virtual Search Search { get; set; }
+        public int recordsFiltered { get; private set; }
         /// <summary>
-        /// Gets/Sets the column collection.
+        /// Creates a new DataTables response object with it's elements.
         /// </summary>
-        public virtual ColumnCollection Columns { get; set; }
+        /// <param name="draw">The draw counter as received from the DataTablesRequest.</param>
+        /// <param name="data">The data collection (data page).</param>
+        /// <param name="recordsFiltered">The resulting number of records after filtering.</param>
+        /// <param name="recordsTotal">The total number of records (total dataset).</param>
+        public DataTablesResponse(int draw, IEnumerable data, int recordsFiltered, int recordsTotal)
+        {
+            this.draw = draw;
+            this.data = data;
+            this.recordsFiltered = recordsFiltered;
+            this.recordsTotal = recordsTotal;
+        }
     }
 }

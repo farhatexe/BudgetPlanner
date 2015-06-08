@@ -30,7 +30,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
-namespace BudgetPlanner.Models
+namespace DataTables.Mvc
 {
     /// <summary>
     /// Defines a DataTables binder to bind a model with the request parameters from DataTables.

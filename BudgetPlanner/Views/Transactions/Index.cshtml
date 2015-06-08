@@ -32,17 +32,28 @@
                 </div>
                 <div class="panel-body">
                     <div class="col-md-12">
-                        <div class="col-md-3">
-                            <p class="text-center">Date Range</p>
-                            <div class="input-daterange input-group" id="datepicker" style="width:250px">
-                                <input type="text" class="input-sm form-control" name="sdate" />
-                                <span class="input-group-addon">to</span>
-                                <input type="text" class="input-sm form-control" name="edate" />
-                            </div>
-                            <br />
-                        </div>
-                        
-                        <table class="table table-hover table-striped table-responsive" id="TransactionDataTable" data-order='[[ 1, "asc"]]'>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>Date Range Search:</td>
+                                    <td class="input-daterange input-group" id="datepicker" style="width:250px">
+                                        <input type="text" class="input-sm form-control" name="sDate" id="sDate" />
+                                        <span class="input-group-addon">to</span>
+                                        <input type="text" class="input-sm form-control" name="eDate" id="eDate" />
+                                    </td>
+                                </tr>
+                                <tr>                                   
+                                    <td>Amount Range Search:</td>
+                                    <td class="input-group" style="width:250px">
+                                        <input type="text" class="input-sm form-control" name="sAmt" id="sAmt" />
+                                        <span class="input-group-addon">to</span>
+                                        <input type="text" class="input-sm form-control" name="eAmt" id="eAmt" />
+                                    </td>
+                                </tr>                                
+                            </tbody>                            
+                        </table>   
+                        <br />                     
+                        <table class="table table-hover table-striped table-responsive" id="TransactionDataTable">
                             <thead>
                                 <tr>
                                     <th class="col-md-1">
@@ -78,46 +89,76 @@
 @section scripts {
     <script src="/Scripts/bootstrap-datepicker.js"></script>
     <script src="/Scripts/jquery.dataTables.min.js"></script>
+
     <script>
-        $(document).ready(function () 
-        {
-            $('#TransactionDataTable').dataTable({
-                "serverSide": true,
-                "ajax": {
-                    "url": "@Url.RouteUrl("TransactionsTableAjax", new { acctId = ViewBag.AccountId})",
-                    "type": "POST"
-                },
-                "processing": true,
-                "columns":
-                    [
-                        {
-                            "data": "Date"
-                        },
-                        {
-                            "data": "Description"
-                        },
-                        {
-                            "data": "Category"
-                        },
-                        {
-                            "data": "Amount"
-                        },
-                        {
-                            "data": "Reconciled"
-                        },
-                        {
-                            "data": "UpdateBy"
-                        }
-                    ]
-            });
+    $(document).ready(function () {
+
+        $('body').on('change', '#eDate, #sDate, #eAmt, #sAmt', function (e) {
+            $('#TransactionDataTable').DataTable().ajax.reload();
+        })
+
+        @*$('#TransactionDataTable').on('click', 'button', function () {
+            $.get(@Url.RouteUrl("TransactionDelete", new { id = t.id}))
+        });*@
+
+        $('#TransactionDataTable').dataTable({
+            "serverSide": true,
+            "ajax": {
+                "url": "@Url.RouteUrl("TransactionsTableAjax", new { acctId = ViewBag.AccountId})",
+                "type": "POST",
+                "data": function (d) {
+                    d.sDate = $('#sDate').val() != "" ? $('#sDate').val() : null;
+                    d.eDate = $('#eDate').val() != "" ? $('#eDate').val() : null;
+                    d.sAmt = $('#sAmt').val() != "" ? $('#sAmt').val() : null;
+                    d.eAmt = $('#eAmt').val() != "" ? $('#eAmt').val() : null;
+                }
+            },
+            "processing": true,
+            "columns":
+                [
+                    {
+                        "data": "Date",
+                        "name": "Date"
+                    },
+                    {
+                        "data": "Description",
+                        "name": "Description"
+                    },
+                    {
+                        "data": "Category",
+                        "name": "Category"
+                    },
+                    {
+                        "data": "Amount",
+                        "name": "Amount"
+                    },
+                    {
+                        "data": "Reconciled",
+                        "name": "Reconciled"
+
+                    },
+                    {
+                        "data": "UpdateBy",
+                        "name": "Update By"
+                    }
+                    //,
+                    //{
+                    //    "data": null,
+                    //    "defaultContent": "<button>Delete</button>"
+                    //}
+                ]
         });
-    </script>
-    <script>
-        $(document).ready(function () {
-            $('#datepicker .input-daterange').datepicker({
-                format: "dd/mm/yyyy",
-                autoclose: true
-            });
+
+    });
+
+    $(document).ready(function () {
+        $('#datepicker.input-daterange').datepicker({
+            format: "mm/dd/yyyy",
+            autoclose: true
         });
+    });
+
+
     </script>
+
 }

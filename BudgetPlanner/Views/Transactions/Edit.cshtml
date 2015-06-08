@@ -13,6 +13,9 @@
             <div class="panel">
                 <div class="panel-heading">
                     <div class="col-md-12">
+                        <div class="col-sm-1">
+                            <a href="@Url.RouteUrl("TransactionDelete", new { id = Model.Id, acctId = ViewBag.AccountId })" class="glyphicon glyphicon-trash"> </a>
+                        </div>
                         <div class="col-md-5">
                             <h4>
                                 @ViewBag.Name Transaction
@@ -68,7 +71,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <div class="col-md-offset-2 col-md-10">
+                                    <div class="col-md-offset-2 col-md-2">
                                         <input type="submit" value="Save" class="btn btn-default" />
                                     </div>
                                 </div>

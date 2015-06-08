@@ -29,7 +29,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BudgetPlanner.Models
+namespace DataTables.Mvc
 {
     /// <summary>
     /// Provides extension methods for use with NameValueCollections.
@@ -60,7 +60,7 @@ namespace BudgetPlanner.Models
             if (String.IsNullOrWhiteSpace(key)) throw new ArgumentException("The provided key cannot be null or empty.", "key");
 
             var collectionItem = collection[key];
-            if (collectionItem == null) return (T)defaultValue;
+            if (string.IsNullOrWhiteSpace(collectionItem)) return (T)defaultValue;
             return (T)Convert.ChangeType(collectionItem, typeof(T));
         }
         /// <summary>

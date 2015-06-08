@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using BudgetPlanner.Models;
 using System.ComponentModel;
+using DataTables.Mvc;
 
 namespace BudgetPlanner.Controllers
 {
@@ -272,28 +273,39 @@ namespace BudgetPlanner.Controllers
         // datatable handler
         [HttpPost]
         [Route("Accounts/{acctId:int}/Transactions/Index", Name = "TransactionsTableAjax")]
-        public JsonResult AjaxHandler([ModelBinder(typeof(DataTablesBinder))] IDataTablesRequest param, int acctId)
+        public JsonResult AjaxHandler([ModelBinder(typeof(TransactionSearchDataTablesBinder))] TransactionSearchRequest param, int acctId)
+        //public JsonResult AjaxHandler([ModelBinder(typeof(DataTablesBinder))] IDataTablesRequest param, int acctId, DateTime fDate, DateTime tDate, decimal fAmount, decimal tAmount)
         {
             IQueryable<Transaction> filteredTransactions = db.Transactions.AsQueryable();
 
             var user = db.Users.Single(u => u.UserName == User.Identity.Name);
             var userId = User.Identity.GetUserId();
+            DateTime defaultDate = DateTime.MinValue;
 
             filteredTransactions = filteredTransactions.Where(t => t.AccountId == acctId);
+
+            // if date ranges were entered
+            if (param.sDate != defaultDate)
+            {
+                filteredTransactions = filteredTransactions
+                .Where(t => t.Date >= param.sDate.Value && t.Date <= param.eDate.Value);
+            }
+
+            // if amount ranges were entered
+            if (param.sAmt != 0)
+            {
+                filteredTransactions = filteredTransactions
+                .Where(t => t.Amount >= param.sAmt && t.Amount <= param.eAmt);
+            }
+
 
             var search = param.Search.Value;
             if (!string.IsNullOrEmpty(search))
             {
-                //filteredTransactions = filteredTransactions
-                //    .Where(t => t.Date.Equals(search) ||
-                //        t.Description.Contains(search) ||
-                //        t.Category.Name.Contains(search) ||
-                //        t.Amount.Equals(search)  ||
-                //        t.Reconciled.Equals(search)
-                //        );
                 filteredTransactions = filteredTransactions
                     .Where(t => t.Description.Contains(search) ||
-                        t.Category.Name.Contains(search)
+                        t.Category.Name.Contains(search) ||
+                        t.UpdateByUser.Name.Contains(search)
                         );
             }
 
@@ -314,7 +326,7 @@ namespace BudgetPlanner.Controllers
                             break;
                         case "Reconciled": filteredTransactions = filteredTransactions.OrderByDescending(t => t.Reconciled);
                             break;
-                        case "UpdateByUser": filteredTransactions = filteredTransactions.OrderByDescending(t => t.UpdateByUser.Name);
+                        case "UpdateBy": filteredTransactions = filteredTransactions.OrderByDescending(t => t.UpdateByUser.Name);
                             break;
                     }
                 }
@@ -332,20 +344,20 @@ namespace BudgetPlanner.Controllers
                             break;
                         case "Reconciled": filteredTransactions = filteredTransactions.OrderBy(t => t.Reconciled);
                             break;
-                        case "UpdateByUser": filteredTransactions = filteredTransactions.OrderBy(t => t.UpdateByUser.Name);
+                        case "UpdateBy": filteredTransactions = filteredTransactions.OrderBy(t => t.UpdateByUser.Name);
                             break;
                     }
                 }
             }
             var urlHelper = new UrlHelper(Request.RequestContext);
             var result = filteredTransactions.Skip(param.Start).Take(param.Length).ToList().Select(t => new TransactionViewModel() { 
-                Date = t.Date.ToString("d"),
+                Date = t.Date.Date.ToString("d"),
                 Description = "<a href=\"" + urlHelper.RouteUrl("TransactionEdit", new { acctId = acctId, id = t.Id }) + "\">" + t.Description + "</a>",
                 Amount = t.Amount,
                 Category = t.Category.Name,
                 Reconciled = t.Reconciled == true ? "Yes" : "No",
-                UpdateBy = t.UpdateByUser != null ? t.UpdateByUser.Name : "",
-                //Delete = "<a href=\"" + urlHelper.RouteUrl("TransactionDelete", new { id = t.Id }) + "\">" + class="glyphicon glyphicon-trash" + "</a>"
+                UpdateBy = t.UpdateByUser != null ? t.UpdateByUser.Name : ""
+                //Delete = "<a href=\"" + urlHelper.RouteUrl("TransactionDelete", new { id = t.Id }) + "\">" + "Delete" + "</a>"
             });
             return Json(new DataTablesResponse(param.Draw, result, filteredTransactions.Count(), db.Transactions.Count()), JsonRequestBehavior.AllowGet);
         }

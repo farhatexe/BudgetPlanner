@@ -146,8 +146,11 @@
     <div class="row">        
         <div class="col-sm-12 col-lg-12">
             <div class="dash-unit" style="height:250px">
-                <div class="col-sm-12 text-center" id="barLegend">
-                    <h3>Budget vs. Actual</h3>
+                <div class="col-sm-12 text-center">
+                    <div class="col-sm-4"></div>
+                    <div class="col-sm-1"><h3 style="color:rgba(220,220,220,0.75)">Budget</h3></div>
+                    <div class="col-sm-1"><h3> vs. </h3></div>
+                    <div class="col-sm-1"><h3 style="color:rgba(151,187,205,0.75)">Actual</h3>
                 </div>
                 <div class="col-sm-12 col-lg-12">
                     <hr>
@@ -194,7 +197,7 @@
              barStrokeWidth: 2,  //Number - Pixel width of the bar stroke
              barValueSpacing: 5, //Number - Spacing between each of the X value sets
              barDatasetSpacing: 1,   //Number - Spacing between data sets within X values
-             legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].fillColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
+             legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"color:<%=datasets[i].fillColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
 
          }
 
@@ -211,11 +214,11 @@
             }
 
             Chart.defaults.global.scaleFontColor="white";
-            var context = $("#barChart").get(0).getContext("2d");
-            window.barChart = new Chart(context).Bar(data,responsive = true)
+            var context = $("#barChart").get(0).getContext("2d");             
+            window.barChart = new Chart(context).Bar(data, responsive = true)
             window.barChart.update;
 
-            //document.getElementById('barLegend').innerHTML = barChart.generateLegend();
+            //document.getElementById('barLegend').innerHTML = window.barChart.generateLegend();
         })
 
 

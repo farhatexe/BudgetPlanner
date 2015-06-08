@@ -211,6 +211,35 @@ namespace BudgetPlanner.Controllers
             return RedirectToAction("Index", new { Message = ManageMessageId.RemovePhoneSuccess });
         }
 
+        // GET: /Manage/Profile
+        //public ActionResult Edit()
+        //{
+        //    var userId = User.Identity.GetUserId();
+        //    ApplicationUser user =  UserManager.FindById(User.Identity.GetUserId());
+        //    return View();
+        //}
+
+        
+        // POST: /Manage/Profile
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> Profile(ProfileViewModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return View(model);
+        //    }
+
+        //    ApplicationUser user = UserManager.FindById(User.Identity.GetUserId());
+        //    user.Name = model.NewName;
+        //    user.Email = model.NewEmail;
+        //    IdentityResult result = await UserManager.UpdateAsync(user);
+
+        //    if (result.Succeeded)
+        //        return RedirectToAction("Index");
+
+        //}
+
         //
         // GET: /Manage/ChangePassword
         public ActionResult ChangePassword()
