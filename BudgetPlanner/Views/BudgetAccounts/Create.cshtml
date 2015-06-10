@@ -4,10 +4,6 @@
     ViewBag.Title = "Create Account";
 }
 
-@*<link href="~/Content/Block/main.css" rel="stylesheet" />
-
-<div class="container">*@
-
     <br />
     <br />
     <div class="col-md-12">
@@ -15,6 +11,9 @@
             <div class="panel">
                 <div class="panel-heading">
                     <div class="col-md-12">
+                        <div class="col-md-pull-1">
+                            <div class="btn pull-left"><a href="@Url.Action("Index", "BudgetAccounts")" class="glyphicon glyphicon-hand-left" style="font-size: 16px"> </a></div>
+                        </div>
                         <div class="col-md-5">
                             <h4>
                                 @ViewBag.Household Household
@@ -62,17 +61,13 @@
                                     </div>
                                 </div>
                             </div>
-                        }
-
-                        <div>
-                            @Html.ActionLink("Back to List", "Index")
-                        </div>
+                        }                        
                     </div>
                 </div> <!-- panel body -->
-            </div><!--col-md-10-->
-        </div><!--col-md-12-->
-    </div><!-- /row -->
-@*</div>*@ <!-- /container -->
+            </div><!--panel-->
+        </div><!--col-md-10-->
+    </div><!-- col-md-12 -->
+
 
 
 @section Scripts {

@@ -13,9 +13,15 @@
             <div class="panel">
                 <div class="panel-heading">
                     <div class="col-md-12">
-                        <div class="col-sm-1">
-                            <a href="@Url.RouteUrl("TransactionDelete", new { id = Model.Id, acctId = ViewBag.AccountId })" class="glyphicon glyphicon-trash"> </a>
+                        <div class="col-sm-2">
+                            <div class="col-sm-1">
+                                <a href="@Url.Action("Index", "Transactions", new { acctId = ViewBag.AccountId })" class="glyphicon glyphicon-hand-left" style="font-size: 16px"> </a>
+                            </div>
+                            <div class="col-sm-1">
+                                <a href="@Url.RouteUrl("TransactionDelete", new { id = Model.Id, acctId = ViewBag.AccountId })" class="glyphicon glyphicon-trash"> </a>
+                            </div>
                         </div>
+                        
                         <div class="col-md-5">
                             <h4>
                                 @ViewBag.Name Transaction
@@ -77,9 +83,6 @@
                                 </div>
                             </div>
                         }
-                    </div>
-                    <div class="panel-footer">
-                        @Html.ActionLink("Back to List", "Index", new { acctId = ViewBag.AccountId })
                     </div>
                 </div>
             </div>

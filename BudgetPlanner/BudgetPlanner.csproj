@@ -588,6 +588,7 @@
     <Content Include="Views\BudgetItems\Index.cshtml" />
     <Content Include="Views\Households\Select.cshtml" />
     <Content Include="Views\Households\Display.cshtml" />
+    <Content Include="Views\Manage\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

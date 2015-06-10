@@ -212,18 +212,22 @@ namespace BudgetPlanner.Controllers
         }
 
         // GET: /Manage/Profile
-        //public ActionResult Edit()
-        //{
-        //    var userId = User.Identity.GetUserId();
-        //    ApplicationUser user =  UserManager.FindById(User.Identity.GetUserId());
-        //    return View();
-        //}
+        public ActionResult Edit()
+        {
+            var userId = User.Identity.GetUserId();
+            ApplicationUser user = UserManager.FindById(User.Identity.GetUserId());
+
+            ProfileEdit model = new ProfileEdit();
+            model.name = user.Name;
+            model.email = user.Email;
+            return View(model);
+        }
 
         
         // POST: /Manage/Profile
         //[HttpPost]
         //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> Profile(ProfileViewModel model)
+        //public async Task<ActionResult> Edit(ProfileEdit model)
         //{
         //    if (!ModelState.IsValid)
         //    {
@@ -231,8 +235,8 @@ namespace BudgetPlanner.Controllers
         //    }
 
         //    ApplicationUser user = UserManager.FindById(User.Identity.GetUserId());
-        //    user.Name = model.NewName;
-        //    user.Email = model.NewEmail;
+        //    user.Name = model.name;
+        //    user.Email = model.email;
         //    IdentityResult result = await UserManager.UpdateAsync(user);
 
         //    if (result.Succeeded)

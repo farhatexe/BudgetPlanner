@@ -43,8 +43,8 @@
                         </dl>
                     </div>
                     <div class="panel-footer">
-                        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-                        @Html.ActionLink("Back to List", "Index")
+                        <div class="btn pull-left"><a href="@Url.Action("Index", "Categories")" class="glyphicon glyphicon-hand-left" style="font-size: 16px"> </a></div>
+                        <div class="btn pull-left"><a href="@Url.Action("Edit", "Categories", new { id = Model.Id })" class="glyphicon glyphicon-pencil" style="font-size: 16px"> </a></div>
                     </div>
                 </div>
             </div>

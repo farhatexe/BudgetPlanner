@@ -150,7 +150,7 @@
                     <div class="col-sm-4"></div>
                     <div class="col-sm-1"><h3 style="color:rgba(220,220,220,0.75)">Budget</h3></div>
                     <div class="col-sm-1"><h3> vs. </h3></div>
-                    <div class="col-sm-1"><h3 style="color:rgba(151,187,205,0.75)">Actual</h3>
+                    <div class="col-sm-1"><h3 style="color:rgba(151,187,205,0.75)">Actual</h3></div>
                 </div>
                 <div class="col-sm-12 col-lg-12">
                     <hr>
@@ -207,10 +207,7 @@
             {
                 data.labels.push(response[i].Name);
                 data.datasets[0].data.push(response[i].BudgetAmount);
-                if(response[i].ActualAmount < 0)
-                    data.datasets[1].data.push(response[i].ActualAmount);
-                else
-                    data.datasets[1].data.push(response[i].ActualAmount);
+                data.datasets[1].data.push(response[i].ActualAmount);
             }
 
             Chart.defaults.global.scaleFontColor="white";

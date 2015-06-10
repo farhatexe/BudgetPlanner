@@ -84,4 +84,15 @@ namespace BudgetPlanner.Models
         public ICollection<System.Web.Mvc.SelectListItem> Providers { get; set; }
     }
 
+    public class ProfileEdit
+    {
+        [Required]
+        [Display(Name = "Name")]
+        public string name { get; set; }
+
+        [Required]
+        [Display(Name = "Email")]
+        public string email { get; set; }
+    }
+
 }
