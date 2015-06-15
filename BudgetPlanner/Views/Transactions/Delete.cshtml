@@ -13,13 +13,16 @@
             <div class="panel">
                 <div class="panel-heading">
                     <div class="col-md-12">
+                        <div class="col-md-pull-1">
+                            <div class="btn pull-left"><a href="@Url.Action("Index", "Transactions", new { acctId = ViewBag.AccountId })" class="glyphicon glyphicon-hand-left" style="font-size: 16px"> </a></div>
+                        </div>
                         <div class="col-md-9">
                             <h4>
                                 ARE YOU SURE YOU WANT TO CONTINUE?
                             </h4>
                             <p>
-                                You have requested to delete this transaction. The Balance will be reversed by the amount of this transaction.
-                                If the transaction has been reconciled, then the Reconciled Balance will also be reversed.
+                                You have requested to delete this transaction. The Balance and Reconciled Balance will be reversed by the amount 
+                                of this transaction.
                             </p>
                             
                         </div>
@@ -73,9 +76,6 @@
                                 <input type="submit" value="Delete" class="btn btn-default" />
                             </div>
                         }
-                    </div>
-                    <div class="panel-footer">
-                        @Html.ActionLink("Back to List", "Index", new { acctId = ViewBag.AccountId })
                     </div>
                 </div>
             </div>

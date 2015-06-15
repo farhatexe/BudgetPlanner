@@ -33,8 +33,8 @@ namespace BudgetPlanner.Models
     // You can choose to implement IDataTablesRequest too, if you like.
     public class TransactionSearchRequest : DefaultDataTablesRequest
     {
-        public DateTimeOffset? sDate { get; set; }
-        public DateTimeOffset? eDate { get; set; }
+        public DateTime? sDate { get; set; }
+        public DateTime? eDate { get; set; }
         public decimal? sAmt { get; set; }
         public decimal? eAmt { get; set; }
     }

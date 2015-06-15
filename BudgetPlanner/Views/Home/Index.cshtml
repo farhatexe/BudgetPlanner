@@ -186,21 +186,6 @@
             ]
         };
 
-         var options = {
-             scaleBeginAtZero: true,  //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
-             scaleShowGridLines: true,   //Boolean - Whether grid lines are shown across the chart
-             scaleGridLineColor: "rgba(0,0,0,.05)",  //String - Colour of the grid lines
-             scaleGridLineWidth: 1,  //Number - Width of the grid lines
-             scaleShowHorizontalLines: true, //Boolean - Whether to show horizontal lines (except X axis)
-             scaleShowVerticalLines: true,   //Boolean - Whether to show vertical lines (except Y axis)
-             barShowStroke: true,    //Boolean - If there is a stroke on each bar
-             barStrokeWidth: 2,  //Number - Pixel width of the bar stroke
-             barValueSpacing: 5, //Number - Spacing between each of the X value sets
-             barDatasetSpacing: 1,   //Number - Spacing between data sets within X values
-             legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"color:<%=datasets[i].fillColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
-
-         }
-
         $.post("@Url.Action("GetChartData", "Home")").then(function (response)
         {
             for (i = 0; i < response.length; i++) 
@@ -215,10 +200,7 @@
             window.barChart = new Chart(context).Bar(data, responsive = true)
             window.barChart.update;
 
-            //document.getElementById('barLegend').innerHTML = window.barChart.generateLegend();
         })
-
-
     })
  
 </script>

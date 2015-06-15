@@ -282,10 +282,11 @@ namespace BudgetPlanner.Controllers
             var userId = User.Identity.GetUserId();
             DateTime defaultDate = DateTime.MinValue;
 
+            param.eDate = param.eDate == DateTime.MinValue ? DateTime.MaxValue : param.eDate;
             filteredTransactions = filteredTransactions.Where(t => t.AccountId == acctId);
 
             // if date ranges were entered
-            if (param.sDate != defaultDate)
+            if (param.sDate != defaultDate || param.eDate != defaultDate)
             {
                 filteredTransactions = filteredTransactions
                 .Where(t => t.Date >= param.sDate.Value && t.Date <= param.eDate.Value);

@@ -225,24 +225,26 @@ namespace BudgetPlanner.Controllers
 
         
         // POST: /Manage/Profile
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> Edit(ProfileEdit model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(model);
-        //    }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(ProfileEdit model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
 
-        //    ApplicationUser user = UserManager.FindById(User.Identity.GetUserId());
-        //    user.Name = model.name;
-        //    user.Email = model.email;
-        //    IdentityResult result = await UserManager.UpdateAsync(user);
+            ApplicationUser user = UserManager.FindById(User.Identity.GetUserId());
+            user.Name = model.name;
+            user.Email = model.email;
+            IdentityResult result = await UserManager.UpdateAsync(user);
 
-        //    if (result.Succeeded)
-        //        return RedirectToAction("Index");
+            if (result.Succeeded)
+                return RedirectToAction("Index");
+            else
+                return View();
 
-        //}
+        }
 
         //
         // GET: /Manage/ChangePassword

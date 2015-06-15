@@ -29,13 +29,7 @@ namespace BudgetPlanner.Controllers
                 HouseholdUsers = house.Users.ToList(),
                 Transactions = db.Transactions.Where(t=> t.AccountId == acctId),
                 Budgets = house.BudgetItems.ToList(),
-
-                
-                //BudgetExpense = db.BudgetItems.Where(b => b.Category.Expense == true).Sum(a => a.Amount),
-                //BudgetIncome = db.BudgetItems.Where(b => b.Category.Income == true).Sum(a => a.Amount)
             };
-
-            
 
             return View(model);
         }
@@ -43,27 +37,27 @@ namespace BudgetPlanner.Controllers
         [HttpPost]
         public JsonResult GetChartData()
         {
+            // get household id and account id
             var hhId = int.Parse(User.Identity.GetHouseholdId());
             var acctId = db.BudgetAccounts.FirstOrDefault(a => a.HouseholdId == hhId).Id;
-            //DateTime startDate = DateTime.Today;
-            //DateTime endDate = DateTime.Today.AddDays(-30);
 
+            // get household
             var house = db.Household.FirstOrDefault(h => h.Id == hhId);
 
-            // this needs to be set up in ajax call
-            // get chart data
-            var endPeriod = System.DateTime.Now.AddDays(31);
+            // define starting date point
+            var startPeriod = System.DateTime.Now.AddDays(-31);
+
+            // get data for category labels, transaction amounts and budget amounts
             var data =
                 (
                     from c in house.Categories
                     select new
                     {
                         Name = c.Name,
-                        ActualAmount = (from t in c.Transactions
-                                        where t.Date <= endPeriod
-                                         select t.AbsAmount).DefaultIfEmpty().Sum(),
-                        //ActualAmount = c.Transactions.Where(t=> t.Date >= startDate && t.Date <= endDate).Select(t=> t.Amount).DefaultIfEmpty().Sum(),
-                        BudgetAmount = c.BudgetItems.Select(t => t.Amount).DefaultIfEmpty().Sum()
+                        ActualAmount = (from t in c.Transactions                                    // get transactions for category
+                                        where t.Date >= startPeriod                                 // that are within reporting period
+                                         select t.AbsAmount).DefaultIfEmpty().Sum(),                // get amount and sum
+                        BudgetAmount = c.BudgetItems.Select(t => t.Amount).DefaultIfEmpty().Sum()   // get budget mount for category
                     }
                 );
 
